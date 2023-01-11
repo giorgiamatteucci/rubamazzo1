@@ -1,5 +1,6 @@
 package com.example.rubamazzo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,21 +11,30 @@ import androidx.appcompat.app.AppCompatActivity;
 public class EntraActivity extends AppCompatActivity {
 
     TextView etEmail, etPassword;
-    Button btnEntra;
+    Button btnAccedi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrazione);
+        setContentView(R.layout.activity_accesso);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        btnEntra = findViewById(R.id.btnEntra);
-        btnEntra.setOnClickListener(new View.OnClickListener() {
+
+        btnAccedi = findViewById(R.id.btnAccedi);
+
+        btnAccedi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent menu2 = new Intent(EntraActivity.this, MenuActivity.class);
-                //startActivity(menu2);
+
+                // TODO verificare sul db le credenziali inserite
+
+                // se presenti
+                Intent i = new Intent(EntraActivity.this, MenuActivity.class);
+                startActivity(i);
+
+                //altrimenti
+                // TODO dialog -> messaggio credenziali errate
             }
         });
 

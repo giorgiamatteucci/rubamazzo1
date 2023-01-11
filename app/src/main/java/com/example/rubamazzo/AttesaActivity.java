@@ -19,6 +19,8 @@ public class AttesaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_attesa);
 
         tvAttesaPartita = findViewById(R.id.tvAttesaPartita);
+        tvAttesaPartita.setText(getIntent().getStringExtra("testo"));
+
         btnAnnulla = findViewById(R.id.btnGioca);
         btnAnnulla.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView tvTitolo;
-    Button btnRegistratiMain, btnAccediMain;
+    Button btnRegistrati, btnAccedi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,12 +19,18 @@ public class MainActivity extends AppCompatActivity {
 
         //binding elementi layout con elementi java (oggetti)
         tvTitolo = findViewById(R.id.tvTiitolo);
-        btnRegistratiMain = findViewById(R.id.btnRegistrati);
-        btnAccediMain = findViewById(R.id.btnAccediMain);
 
-        btnAccediMain.setOnClickListener(v -> {
-            Intent prova = new Intent(MainActivity.this, AttesaActivity.class);
-            startActivity(prova);
+        btnRegistrati = findViewById(R.id.btnRegistratiMain);
+        btnAccedi = findViewById(R.id.btnAccediMain);
+
+        btnRegistrati.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
+            startActivity(i);
+        });
+
+        btnRegistrati.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, EntraActivity.class);
+            startActivity(i);
         });
 
     }

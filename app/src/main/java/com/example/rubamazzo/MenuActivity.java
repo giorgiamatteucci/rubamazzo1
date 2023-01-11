@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity {
 
-    Button btnGioca, btnCrea, btnClassifica, btnCome;
+    Button btnGioca, btnCrea, btnClassifica, btnRegole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,13 +19,28 @@ public class MenuActivity extends AppCompatActivity {
         btnGioca = findViewById(R.id.btnGioca);
         btnCrea = findViewById(R.id.btnCrea);
         btnClassifica = findViewById(R.id.btnClassifica);
-        btnCome = findViewById(R.id.btnCome);
+        btnRegole = findViewById(R.id.btnCome);
 
         btnGioca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent menu = new Intent(AttesaActivity.this, MenuActivity.class);
-                //startActivity(menu);
+
+                //andrà ad attendere di essere aggiunto ad una partita già creata
+
+                Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
+                i.putExtra("testo","in attesa di essere aggiunto ad una partita");
+                startActivity(i);
+            }
+        });
+
+        btnCrea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
+                Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
+                i.putExtra("testo","in attesa di uno sfidante");
+                startActivity(i);
             }
         });
 
