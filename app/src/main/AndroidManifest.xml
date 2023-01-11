@@ -19,6 +19,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".RegistrazioneActivity">
+        </activity>
+        <activity
+            android:name=".EntraActivity">
+        </activity>
+        <activity
             android:name=".AttesaActivity">
         </activity>
         <activity
