@@ -5,10 +5,10 @@ import java.util.Random;
 
 public class Mazzo extends ArrayList<Carta> {
 
-    private static Mazzo istance;
+    private static Mazzo istance; //NON SO SE HO CAPITO BENE L'ISTANZA DEL MAZZO
     private static Random random = new Random();
 
-    private Mazzo(){
+    public Mazzo(){
         aggiornaMazzo();
     }
 
@@ -64,22 +64,11 @@ public class Mazzo extends ArrayList<Carta> {
         card.setEstrazione();
         return card;
     }
-//--------------------------------------------------------------------------------------------------
-    public static Mazzo getIstance(){ //NON PENSO MI SERVA
-        if(istance==null)
-            istance = new Mazzo();
-        return istance;
-    }
 
-    public void restoreDeck(){ //NON PENSO MI SERVA
-        istance.clear();
-        aggiornaMazzo();
-    }
-
-    public Carta getCardById(String id){ //NON SO SE MI SERVIRA'
+    public Carta getCardById(String id){//public Carta getCarta(char seme, int valore){
         for(int i=0;i<istance.size();i++){
             Carta carta = istance.get(i);
-            if(carta.getId().equals(id))
+            if(carta.getId().equals(id))//if(carta.getSeme().equals(seme))&&(carta.getValore()==valore)
                 return carta;
         }
         return null;

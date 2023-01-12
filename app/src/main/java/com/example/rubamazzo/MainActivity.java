@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //binding elementi layout con elementi java (oggetti)
-        tvTitolo = findViewById(R.id.tvTiitolo);
+        tvTitolo = findViewById(R.id.tvTitolo);
 
         btnRegistrati = findViewById(R.id.btnRegistratiMain);
         btnAccedi = findViewById(R.id.btnAccediMain);
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        btnRegistrati.setOnClickListener(v -> {
+        btnAccedi.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, EntraActivity.class);
             startActivity(i);
         });

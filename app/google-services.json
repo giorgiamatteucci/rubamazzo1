@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "437669825876",
+    "project_id": "rubamazzo-735b7",
+    "storage_bucket": "rubamazzo-735b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437669825876:android:8ccdbfa548242da8310cc1",
+        "android_client_info": {
+          "package_name": "com.example.rubamazzo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437669825876-4n7q91dcukh5vc7ro73htlgroaor3bbt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArOj-Y16zrDa4Qe4NKtUdqS6CQuWrpF3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437669825876-4n7q91dcukh5vc7ro73htlgroaor3bbt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

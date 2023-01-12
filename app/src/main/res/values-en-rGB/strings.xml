@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RUBAMAZZO</string>
-    <string name="attesa_partita">stiamo cercando una partita</string>
-    <string name="attesa_giocatore">stiamo cercando un giocatore per iniziare la partita</string>
-    <string name="annulla">annulla</string>
+    <string name="app_name">STEALDECK</string>
+    <string name="registrati">register</string>
+    <string name="accedi">login</string>
+    <string name="annulla">cancel</string>
     <string name="indietro">back</string>
+    <string name="nome">name</string>
+    <string name="cognome">surname</string>
 </resources>

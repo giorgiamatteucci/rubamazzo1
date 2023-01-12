@@ -5,39 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/verde">
+    android:background="@drawable/sfondo">
 
     <TextView
-        android:id="@+id/tvTiitolo"
+        android:id="@+id/tvTitolo"
         android:layout_width="197dp"
         android:layout_height="63dp"
         android:text="Rubamazzo"
         android:textAlignment="center"
-        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintVertical_bias="0.212" />
 
     <Button
         android:id="@+id/btnRegistratiMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="212dp"
-        android:text="Registrati"
+        android:text="@string/registrati"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTiitolo"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitolo"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnAccediMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accedi"
+        android:text="@string/accedi"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

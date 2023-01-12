@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">RUBAMAZZO</string>
-    <string name="attesa_partita">stiamo cercando una partita</string>
-    <string name="attesa_giocatore">stiamo cercando un giocatore per iniziare la partita</string>
+    <string name="registrati">registrati</string>
+    <string name="accedi">accedi</string>
     <string name="annulla">annulla</string>
     <string name="indietro">indietro</string>
+    <string name="nome">nome</string>
+    <string name="cognome">cognome</string>
 </resources>
