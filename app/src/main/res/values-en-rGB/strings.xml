@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">STEALDECK</string>
-    <string name="registrati">register</string>
-    <string name="accedi">login</string>
+    <string name="registrati">sign in</string>
+    <string name="accedi">log in</string>
     <string name="annulla">cancel</string>
     <string name="indietro">back</string>
-    <string name="nome">name</string>
-    <string name="cognome">surname</string>
+    <string name="nome">Name</string>
+    <string name="cognome">Surname</string>
+    <string name="aut_fall">Authentication failed</string>
+    <string name="aut_suss">Authentication created</string>
 </resources>

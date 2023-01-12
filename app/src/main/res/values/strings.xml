@@ -4,6 +4,8 @@
     <string name="accedi">accedi</string>
     <string name="annulla">annulla</string>
     <string name="indietro">indietro</string>
-    <string name="nome">nome</string>
-    <string name="cognome">cognome</string>
+    <string name="nome">Nome</string>
+    <string name="cognome">Cognome</string>
+    <string name="aut_fall">Autenticazione fallita</string>
+    <string name="aut_suss">Autenticazione creata</string>
 </resources>

@@ -2,15 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rubamazzo">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Rubamazzo">
+        android:theme="@style/Theme.Material3.Light">
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,16 +21,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrazioneActivity">
+            android:name=".RegistrazioneActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
         </activity>
         <activity
-            android:name=".EntraActivity">
+            android:name=".EntraActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
         </activity>
         <activity
-            android:name=".AttesaActivity">
+            android:name=".AttesaActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
         </activity>
         <activity
-            android:name=".MenuActivity">
+            android:name=".MenuActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
         </activity>
     </application>
 
