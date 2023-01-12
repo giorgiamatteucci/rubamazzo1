@@ -5,6 +5,14 @@ import java.util.Random;
 
 public class Mazzo extends ArrayList<Carta> {
 
+    /*
+        S.E. hai deciso di non fare la classe singleton quindi puoi rimuovere/modificare altra roba perchè così
+             stai nel mezzo e alcune logiche non si comprendono bene dall'esterno (cioè per il Tutor)
+
+             - rimuovere l'istance
+             - spostare il contenuto di aggiornaMazzo nel costruttore ed eliminare il metodo
+     */
+
     private static Mazzo istance; //NON SO SE HO CAPITO BENE L'ISTANZA DEL MAZZO
     private static Random random = new Random();
 

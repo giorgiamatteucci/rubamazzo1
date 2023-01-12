@@ -26,6 +26,11 @@ public class MenuActivity extends AppCompatActivity {
         textViewEmail = findViewById(R.id.textViewEmail);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        /*
+            S.E. capisco l'intento di questo controllo ma penso che se non sei loggato è impossibile arrivare a questa activity.
+                 al momento ti direi di non eliminarlo magari ne parliamo insieme e vediamo se serve
+         */
         if(user == null){
             Intent i = new Intent(getApplicationContext(), EntraActivity.class);
             startActivity(i);
@@ -63,6 +68,8 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+
+        // S.E. brava questa è una funzionalità che andava inserita
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

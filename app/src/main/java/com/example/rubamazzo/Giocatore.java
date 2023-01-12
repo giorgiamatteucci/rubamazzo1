@@ -6,6 +6,8 @@ public class Giocatore {
     private String email;
     private String password;
 
+    //S.E. aggiungere nVittorie e nPartite
+
     public Giocatore(String nome,String cognome,String email,String password) {
         this.nome=nome;
         this.cognome=cognome;

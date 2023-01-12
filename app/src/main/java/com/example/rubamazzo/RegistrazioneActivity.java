@@ -65,6 +65,19 @@ public class RegistrazioneActivity extends AppCompatActivity {
                     Toast.makeText(RegistrazioneActivity.this, "Inserisci password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                /*
+                    S.E. secondo me utilizzi il meotodo sbagliato (signInWithEmailAndPassword)
+                         io firebase non l'ho usato e non lo conosco ma il metodo chiamandosi "singIn"
+                         saecondo me tenta di loggarsi con quell'utenza, mentre tu qui devi crearla l'utenza
+                         Va bene nell'altra activity qui dire di no
+
+                         prova ad utilizzare "createUserWithEmailAndPassword"
+
+                         SUGGERIMENTO. se fai crtl+click su una classe o su un metodo di dovrebbe portare alla sua dichiarazione
+                         se lo fai sui un metodo di FirebaseAuth tipo quello di singIn ti porta al suo file class dove puoi vedere tutti i metodi che ha
+                 */
+
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override

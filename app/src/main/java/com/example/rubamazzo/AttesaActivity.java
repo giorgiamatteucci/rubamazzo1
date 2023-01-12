@@ -18,6 +18,11 @@ public class AttesaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attesa);
 
+        /*
+         S.E. oltre al testo aggiungere un altro parametro all'intent per capire  da quale pulsante è stato invocata l'activity
+              in realtà l'informazione è ricavabile anche facendo un controllo sulla stringa, scegli tu
+         */
+
         tvAttesaPartita = findViewById(R.id.tvAttesaPartita);
         tvAttesaPartita.setText(getIntent().getStringExtra("testo"));
 

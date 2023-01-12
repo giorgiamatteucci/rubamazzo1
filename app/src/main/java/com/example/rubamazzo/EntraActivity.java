@@ -26,6 +26,10 @@ public class EntraActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        // S.E. spostare questa parte nell'activity main
+        // verificare che l'accesso dell'utente resista alla chiusura dell'applicazione (cosa da fare successivamente)
+
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
@@ -56,19 +60,29 @@ public class EntraActivity extends AppCompatActivity {
                 email = String.valueOf(etEmail.getText());
                 password = String.valueOf(etPassword.getText());
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(EntraActivity.this, "Inserisci email", Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(email) && TextUtils.isEmpty(password)){
+                    Toast.makeText(EntraActivity.this, "Inserisci credenziali", Toast.LENGTH_SHORT).show();
                     return;
+                }else {
+                    if (TextUtils.isEmpty(email)) {
+                        Toast.makeText(EntraActivity.this, "Inserisci email", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(password)) {
+                        Toast.makeText(EntraActivity.this, "Inserisci password", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(EntraActivity.this, "Inserisci password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
                 // TODO verificare sul db le credenziali inserite
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                //S.E. vedi un po' cosa ti arriva in questo oggetto task
+                                //Log.d("ACCESSO-LOG", task);
+
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     //Log.d(TAG, "signInWithEmail:success");

@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         btnAccedi = findViewById(R.id.btnAccediMain);
 
         btnRegistrati.setOnClickListener(v -> {
+            // S.E. non lo conosco e domani ti chiederò a cosa serve (per mia curiosità)
             analytics.logEvent("button_clicked", null);
             Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
             startActivity(i);
