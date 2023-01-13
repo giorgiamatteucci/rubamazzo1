@@ -28,17 +28,14 @@ public class MenuActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
 
         /*
-            S.E. capisco l'intento di questo controllo ma penso che se non sei loggato è impossibile arrivare a questa activity.
-                 al momento ti direi di non eliminarlo magari ne parliamo insieme e vediamo se serve
-         */
         if(user == null){
             Intent i = new Intent(getApplicationContext(), EntraActivity.class);
             startActivity(i);
             finish();
         }
-        else{
+        else{*/
             textViewEmail.setText(user.getEmail());
-        }
+        //}
 
         btnGioca = findViewById(R.id.btnGioca);
         btnCrea = findViewById(R.id.btnCrea);
@@ -53,6 +50,7 @@ public class MenuActivity extends AppCompatActivity {
 
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di essere aggiunto ad una partita");
+                i.putExtra("pulsante","client");
                 startActivity(i);
             }
         });
@@ -64,12 +62,11 @@ public class MenuActivity extends AppCompatActivity {
                 //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
+                i.putExtra("pulsante","server");
                 startActivity(i);
             }
         });
 
-
-        // S.E. brava questa è una funzionalità che andava inserita
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

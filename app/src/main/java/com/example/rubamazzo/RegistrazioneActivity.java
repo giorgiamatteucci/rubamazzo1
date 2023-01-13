@@ -66,23 +66,11 @@ public class RegistrazioneActivity extends AppCompatActivity {
                     return;
                 }
 
-                /*
-                    S.E. secondo me utilizzi il meotodo sbagliato (signInWithEmailAndPassword)
-                         io firebase non l'ho usato e non lo conosco ma il metodo chiamandosi "singIn"
-                         saecondo me tenta di loggarsi con quell'utenza, mentre tu qui devi crearla l'utenza
-                         Va bene nell'altra activity qui dire di no
-
-                         prova ad utilizzare "createUserWithEmailAndPassword"
-
-                         SUGGERIMENTO. se fai crtl+click su una classe o su un metodo di dovrebbe portare alla sua dichiarazione
-                         se lo fai sui un metodo di FirebaseAuth tipo quello di singIn ti porta al suo file class dove puoi vedere tutti i metodi che ha
-                 */
-
-                mAuth.signInWithEmailAndPassword(email, password)
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {//NON ENTRA MAI QUI, DEVO CAPIRE IL PERCHE'
+                                if (task.isSuccessful()) {
                                     //creare e registrare su db l'account creato
                                     Toast.makeText(RegistrazioneActivity.this, "Autenticazione creata.", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(getApplicationContext() , EntraActivity.class);
@@ -90,8 +78,8 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                     finish();
                                 } else {
                                     // se la registrazione fallisce, visualizza un messaggio all'utente
-                                    //Toast.makeText(RegistrazioneActivity.this, "Autenticazione fallita.", Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(RegistrazioneActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegistrazioneActivity.this, "Autenticazione fallita.", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(RegistrazioneActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

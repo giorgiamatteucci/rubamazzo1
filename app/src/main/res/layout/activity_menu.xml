@@ -55,6 +55,9 @@
 
     <TextView
         android:id="@+id/textViewEmail"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/btnGioca"

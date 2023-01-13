@@ -27,7 +27,7 @@ public class EntraActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        // S.E. spostare questa parte nell'activity main
+        // S.E. spostare questa parte nell'activity main //SPOSTANDOLA IN MainActivity SI CHIUDE SUBITO L'APP
         // verificare che l'accesso dell'utente resista alla chiusura dell'applicazione (cosa da fare successivamente)
 
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -79,10 +79,6 @@ public class EntraActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                //S.E. vedi un po' cosa ti arriva in questo oggetto task
-                                //Log.d("ACCESSO-LOG", task);
-
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     //Log.d(TAG, "signInWithEmail:success");

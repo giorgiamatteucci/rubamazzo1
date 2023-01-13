@@ -5,22 +5,10 @@ import java.util.Random;
 
 public class Mazzo extends ArrayList<Carta> {
 
-    /*
-        S.E. hai deciso di non fare la classe singleton quindi puoi rimuovere/modificare altra roba perchè così
-             stai nel mezzo e alcune logiche non si comprendono bene dall'esterno (cioè per il Tutor)
-
-             - rimuovere l'istance
-             - spostare il contenuto di aggiornaMazzo nel costruttore ed eliminare il metodo
-     */
-
-    private static Mazzo istance; //NON SO SE HO CAPITO BENE L'ISTANZA DEL MAZZO
     private static Random random = new Random();
 
     public Mazzo(){
-        aggiornaMazzo();
-    }
 
-    private void aggiornaMazzo(){
         // carico tutte le carte
         add(new Carta("b1",R.drawable.b1,1));
         add(new Carta("b2",R.drawable.b2,2));
@@ -65,17 +53,17 @@ public class Mazzo extends ArrayList<Carta> {
     }
     //metodo per estrarre casualemente una carta
     public Carta estraiCarta(){
-        Carta card;
+        Carta car;
         do{
-            card = istance.get(random.nextInt(40));
-        }while(card.isEstratta());
-        card.setEstrazione();
-        return card;
+            car = this.get(random.nextInt(40)); //NON SO SE VA BENE
+        }while(car.isEstratta());
+        car.setEstrazione();
+        return car;
     }
 
     public Carta getCardById(String id){//public Carta getCarta(char seme, int valore){
-        for(int i=0;i<istance.size();i++){
-            Carta carta = istance.get(i);
+        for(int i=0;i<this.size();i++){
+            Carta carta = this.get(i);
             if(carta.getId().equals(id))//if(carta.getSeme().equals(seme))&&(carta.getValore()==valore)
                 return carta;
         }
