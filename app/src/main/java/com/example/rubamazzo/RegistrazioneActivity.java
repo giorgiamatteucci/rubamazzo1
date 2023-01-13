@@ -25,18 +25,6 @@ public class RegistrazioneActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            //reload();
-            Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-            startActivity(i);
-            finish();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrazione);

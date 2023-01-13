@@ -27,15 +27,7 @@ public class MenuActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        /*
-        if(user == null){
-            Intent i = new Intent(getApplicationContext(), EntraActivity.class);
-            startActivity(i);
-            finish();
-        }
-        else{*/
-            textViewEmail.setText(user.getEmail());
-        //}
+        textViewEmail.setText(user.getEmail());
 
         btnGioca = findViewById(R.id.btnGioca);
         btnCrea = findViewById(R.id.btnCrea);
@@ -64,6 +56,13 @@ public class MenuActivity extends AppCompatActivity {
                 i.putExtra("testo","in attesa di uno sfidante");
                 i.putExtra("pulsante","server");
                 startActivity(i);
+            }
+        });
+
+        btnClassifica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               //TODO visualizza top 5/10
             }
         });
 

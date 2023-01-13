@@ -3,6 +3,7 @@ package com.example.rubamazzo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,22 +24,6 @@ public class EntraActivity extends AppCompatActivity {
     Button btnAccedi;
     FirebaseAuth mAuth;
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // S.E. spostare questa parte nell'activity main //SPOSTANDOLA IN MainActivity SI CHIUDE SUBITO L'APP
-        // verificare che l'accesso dell'utente resista alla chiusura dell'applicazione (cosa da fare successivamente)
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            //reload();
-            Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-            startActivity(i);
-            finish();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +38,11 @@ public class EntraActivity extends AppCompatActivity {
         btnAccedi = findViewById(R.id.btnAccedi);
 
         btnAccedi.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+
+                Log.d("1234","click su accedi - EntraActivity");
 
                 String email, password;
                 email = String.valueOf(etEmail.getText());
@@ -74,15 +62,17 @@ public class EntraActivity extends AppCompatActivity {
                     }
                 }
 
-                // TODO verificare sul db le credenziali inserite
+                Log.d("1234"," invio messaggio a firebase");
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                Log.d("1234"," ricevo risposta");
+                                Log.d("1234",task.toString());
+
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    //Log.d(TAG, "signInWithEmail:success");
-                                    //FirebaseUser user = mAuth.getCurrentUser();
                                     Toast.makeText(getApplicationContext(), "Login ok.",Toast.LENGTH_SHORT).show();
                                     //updateUI(user);
 
