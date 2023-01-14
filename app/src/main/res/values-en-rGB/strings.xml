@@ -9,4 +9,7 @@
     <string name="cognome">Surname</string>
     <string name="aut_fall">Authentication failed</string>
     <string name="aut_suss">Authentication created</string>
+    <string name="classifica">Ranking</string>
+    <string name="percVittorie">% win</string>
+    <string name="posizione">position</string>
 </resources>

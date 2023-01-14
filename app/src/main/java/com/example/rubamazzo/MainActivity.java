@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         btnAccedi = findViewById(R.id.btnAccediMain);
 
         btnRegistrati.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, ActivityGiocoClient.class);
+            Intent i = new Intent(MainActivity.this, MenuActivity.class);
             //Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
             startActivity(i);
         });

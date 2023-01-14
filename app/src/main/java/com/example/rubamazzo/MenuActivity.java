@@ -27,7 +27,7 @@ public class MenuActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        textViewEmail.setText(user.getEmail());
+        //textViewEmail.setText(user.getEmail());
 
         btnGioca = findViewById(R.id.btnGioca);
         btnCrea = findViewById(R.id.btnCrea);
@@ -62,7 +62,8 @@ public class MenuActivity extends AppCompatActivity {
         btnClassifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //TODO visualizza top 5/10
+                Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
+                startActivity(i);
             }
         });
 

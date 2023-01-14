@@ -16,6 +16,17 @@ public class Giocatore {
         this.email=email;
         this.password=password;
     }
+
+    //per prova Enrico, andrà rimosso
+    public Giocatore(String email,String password,int nVittorie, int nPartite) {//(String nome,String cognome,String email,String password) {
+        this.nVittorie = nVittorie;
+        this.nPartite = nPartite;
+        //this.nome=nome;
+        //this.cognome=cognome;
+        this.email=email;
+        this.password=password;
+    }
+
     //public String getNome(){return nome;}
     //public String getCognome(){return cognome;}
     public String getEmail(){return email;}
