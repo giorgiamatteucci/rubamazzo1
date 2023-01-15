@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,9 +48,14 @@ public class MainActivity extends AppCompatActivity {
         btnAccedi = findViewById(R.id.btnAccediMain);
 
         btnRegistrati.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, MenuActivity.class);
-            //Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
+            //Intent i = new Intent(MainActivity.this, ActivityGiocoClient.class); //PROVA POI DA ELIMINARE
+            Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
             startActivity(i);
+
+            // PROVA DATABASE
+            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("message");
+            myRef.setValue("Hello, World!");*/
         });
 
         btnAccedi.setOnClickListener(v -> {

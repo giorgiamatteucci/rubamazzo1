@@ -42,7 +42,7 @@ public class MenuActivity extends AppCompatActivity {
 
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di essere aggiunto ad una partita");
-                i.putExtra("pulsante","client");
+                //i.putExtra("pulsante","client");
                 startActivity(i);
             }
         });
@@ -54,7 +54,7 @@ public class MenuActivity extends AppCompatActivity {
                 //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
-                i.putExtra("pulsante","server");
+                //i.putExtra("pulsante","server");
                 startActivity(i);
             }
         });
@@ -71,7 +71,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(getApplicationContext(), EntraActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 finish();
             }

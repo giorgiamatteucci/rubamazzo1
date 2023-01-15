@@ -43,4 +43,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.698" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="86dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="37dp"
+        android:text="Prova"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGioca" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
