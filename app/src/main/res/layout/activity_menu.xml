@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btnClassifica" />
 
     <TextView
-        android:id="@+id/textViewEmail"
+        android:id="@+id/tvUser"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:textSize="20sp"

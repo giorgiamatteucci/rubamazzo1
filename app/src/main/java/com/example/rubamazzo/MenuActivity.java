@@ -10,24 +10,24 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MenuActivity extends AppCompatActivity {
 
     Button btnGioca, btnCrea, btnClassifica, btnLogout;
-    TextView textViewEmail;
-    FirebaseAuth auth;
-    FirebaseUser user;
+    TextView tvUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        textViewEmail = findViewById(R.id.textViewEmail);
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-
-        //textViewEmail.setText(user.getEmail());
+        tvUser = findViewById(R.id.tvUser);
+        tvUser.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        //HO PROVATO A STAMPARE L'USERNAME MA NON CI SONO RIUSCITA
+        //tvUser.setText(FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/username").toString());
+        //DatabaseReference user = FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/username");
 
         btnGioca = findViewById(R.id.btnGioca);
         btnCrea = findViewById(R.id.btnCrea);
@@ -42,7 +42,6 @@ public class MenuActivity extends AppCompatActivity {
 
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di essere aggiunto ad una partita");
-                //i.putExtra("pulsante","client");
                 startActivity(i);
             }
         });
@@ -54,7 +53,6 @@ public class MenuActivity extends AppCompatActivity {
                 //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
-                //i.putExtra("pulsante","server");
                 startActivity(i);
             }
         });

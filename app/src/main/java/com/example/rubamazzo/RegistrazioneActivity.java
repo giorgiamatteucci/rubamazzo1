@@ -16,11 +16,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class RegistrazioneActivity extends AppCompatActivity {
 
-    EditText etEmail, etPassword;//EditText etNome, etCognome, etEmail, etPassword;
+    EditText etEmail, etPassword, etUsername;
     Button btnRegistrati;
     FirebaseAuth mAuth;
 
@@ -30,8 +32,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registrazione);
 
         mAuth = FirebaseAuth.getInstance();
-        //etNome = findViewById(R.id.etNome);
-        //etCognome = findViewById(R.id.etCognome);
+        etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmailRegistrazione);
         etPassword = findViewById(R.id.etPasswordRegistrati);
 
@@ -41,9 +42,10 @@ public class RegistrazioneActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String email, password;
+                String email, password, username;
                 email = String.valueOf(etEmail.getText());
                 password = String.valueOf(etPassword.getText());
+                username = String.valueOf(etUsername.getText());
 
                 if(TextUtils.isEmpty(email)){
                     Toast.makeText(RegistrazioneActivity.this, "Inserisci email", Toast.LENGTH_SHORT).show();
@@ -53,6 +55,10 @@ public class RegistrazioneActivity extends AppCompatActivity {
                     Toast.makeText(RegistrazioneActivity.this, "Inserisci password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(TextUtils.isEmpty(username)){
+                    Toast.makeText(RegistrazioneActivity.this, "Inserisci username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -60,6 +66,8 @@ public class RegistrazioneActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     //creare e registrare su db l'account creato
+                                    FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new Giocatore(username, email, password));
+
                                     Toast.makeText(RegistrazioneActivity.this, "Autenticazione creata.", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(getApplicationContext() , EntraActivity.class);
                                     startActivity(i);//poi andando in EntraActivity saremo subito rindirizzati a MenuActivity

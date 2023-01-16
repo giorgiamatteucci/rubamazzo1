@@ -51,11 +51,6 @@ public class MainActivity extends AppCompatActivity {
             //Intent i = new Intent(MainActivity.this, ActivityGiocoClient.class); //PROVA POI DA ELIMINARE
             Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
             startActivity(i);
-
-            // PROVA DATABASE
-            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("message");
-            myRef.setValue("Hello, World!");*/
         });
 
         btnAccedi.setOnClickListener(v -> {

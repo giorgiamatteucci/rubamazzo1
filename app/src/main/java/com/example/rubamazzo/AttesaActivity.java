@@ -24,18 +24,14 @@ public class AttesaActivity extends AppCompatActivity {
         btnProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
-                startActivity(i);
-                if(getIntent().getStringExtra("testo") == "in attesa di essere aggiunto ad una partita"){
+                if(getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")){
                     //gioca come client
-                    //Intent i = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
-                    //startActivity(i);
+                    startActivity(new Intent(AttesaActivity.this, ActivityGiocoClient.class));
+                    // .putExtra();
                 }
                 else {
                     //indent gioca come server
-                    //Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
-                    //startActivity(i);
-                    Log.d("prova","ERRORE PENSO NON ENTRI MAI NELL'IF");
+                    startActivity(new Intent(AttesaActivity.this, ActivityGiocoServer.class));
                 }
             }
         });

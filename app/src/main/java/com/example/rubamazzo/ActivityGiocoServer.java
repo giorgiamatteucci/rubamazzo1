@@ -1,17 +1,21 @@
 package com.example.rubamazzo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 public class ActivityGiocoServer extends AppCompatActivity {
 
     ImageView ivC1Server, ivC2Server, ivC3Server, ivC1Client, ivC2Client, ivC3Client, ivMazzoServer, ivMazzoClient;
     RecyclerView rvSopra, rvSotto;
     RecyclerView.LayoutManager layoutManager;
-    //CardAdapter myCardAdapter;
+    CartaAdapter adapterSopra, adapterSotto;
+    ArrayList<Carta> carteSotto, carteSopra;
 
 
     @Override
@@ -31,5 +35,17 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
         rvSopra = findViewById(R.id.rvSopra);
         rvSotto = findViewById(R.id.rvSotto);
+        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
+        rvSopra.setLayoutManager(layoutManager);
+        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
+        rvSotto.setLayoutManager(layoutManager);
+
+        carteSotto = new ArrayList<>();
+        adapterSotto = new CartaAdapter(carteSotto);
+        rvSotto.setAdapter(adapterSotto);
+
+        carteSopra = new ArrayList<>();
+        adapterSopra = new CartaAdapter(carteSopra);
+        rvSopra.setAdapter(adapterSopra);
     }
 }

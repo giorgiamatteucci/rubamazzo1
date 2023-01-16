@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -29,6 +30,7 @@ public class ActivityClassifica extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     RigaAdapter rigaAdapter;
     ArrayList<Giocatore> giocatori;
+    TextView myUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,12 @@ public class ActivityClassifica extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL,false);
         rvClassifica.setLayoutManager(layoutManager);
         giocatori = new ArrayList<>();
-        prova();
+        //-------------------------
+        getGiocatori();//prova();
+        //-------------------------
         rigaAdapter = new RigaAdapter(giocatori);
         rvClassifica.setAdapter(rigaAdapter);
+        myUsername = findViewById(R.id.tvMyUser);
 
         btnIndietro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,29 +65,39 @@ public class ActivityClassifica extends AppCompatActivity {
 
     }
 
-    void prova(){
+    private void getGiocatori(){
+
+        Log.d("TAG01",  FirebaseDatabase.getInstance().getReference("Giocatore").getDatabase().toString());
+        // Read from the database PROVA
+            /*FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    //NON FUNZIONA, si spacca! (tentativo di restituire l'elenco dei Giocatori)
+                    for(DataSnapshot dataSnapshot :snapshot.getChildren()){
+                        Giocatore giocatore = new Giocatore(dataSnapshot.getValue(Giocatore.class).getUsername(),dataSnapshot.getValue(Giocatore.class).getEmail(),dataSnapshot.getValue(Giocatore.class).getPassword());
+                        giocatori.add(giocatore);
+                    }
+                    //for(Giocatore giocatore : giocatori){
+                      //  if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                        //    myUsername.setText(giocatore.getUsername());
+                          //  return;
+                        //}
+                    }
+                    // This method is called once with the initial value and again whenever data at this location is updated.
+                    //String value = snapshot.getValue(String.class);
+                    //Log.d(TAG, "Value is: " + value);
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Log.d(TAG, "Failed to read value.", error.toException());
+                }
+            });*/
+    }
+    private void prova(){
 
         for(int i=0;i<10;i++){
             Giocatore giocatore = new Giocatore("enricoluc@gmail.com","",10-i,10);
             giocatori.add(giocatore);
-
-            // Read from the database PROVA
-            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("message");
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    String value = dataSnapshot.getValue(String.class);
-                    Log.d(TAG, "Value is: " + value);
-
-                }
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });*/
         }
 
     }
