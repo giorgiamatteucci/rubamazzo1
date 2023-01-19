@@ -4,47 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/sfondo">
+    android:background="@drawable/sfondo"
+    tools:context=".RegoleActivity">
 
     <TextView
-        android:id="@+id/tvTitolo"
-        android:layout_width="239dp"
-        android:layout_height="56dp"
-        android:text="@string/app_name"
-        android:textAlignment="center"
+        android:id="@+id/tvTitRegole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/regole"
         android:textColor="@color/white"
         android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.212" />
+        app:layout_constraintVertical_bias="0.095" />
 
-    <Button
-        android:id="@+id/btnRegistratiMain"
+    <TextView
+        android:id="@+id/tvRegole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="212dp"
-        android:text="@string/registrati"
+        android:textColor="@color/white"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitolo"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnAccediMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/accedi"
+        android:id="@+id/btnIndMenu"
+        android:layout_width="131dp"
+        android:layout_height="64dp"
+        android:text="@string/indietro"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegistratiMain"
-        app:layout_constraintVertical_bias="0.356" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.926" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

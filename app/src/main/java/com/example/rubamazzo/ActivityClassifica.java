@@ -43,7 +43,7 @@ public class ActivityClassifica extends AppCompatActivity {
         rvClassifica = findViewById(R.id.rvClassifica);
         layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL,false);
         rvClassifica.setLayoutManager(layoutManager);
-        giocatori = new ArrayList<>();
+        //giocatori = new ArrayList<>();
         //-------------------------
         getGiocatori();//prova();
         //-------------------------
@@ -69,7 +69,6 @@ public class ActivityClassifica extends AppCompatActivity {
     }
 
     private void getGiocatori(){
-
         /*if(FirebaseDatabase.getInstance().getReference("Giocatore").getDatabase() == null){
             Log.d("TAG01","database vuoto");
         }else{
@@ -109,12 +108,7 @@ public class ActivityClassifica extends AppCompatActivity {
            FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    //NON FUNZIONA, si spacca! (tentativo di restituire l'elenco dei Giocatori)
-
                     Log.d("TAG01","onDataChange");
-
-
-
                     for(DataSnapshot dataSnapshot :snapshot.getChildren()){
 
                         Log.d("TAG01"," 1 - "+ dataSnapshot.getValue().toString());
@@ -129,13 +123,6 @@ public class ActivityClassifica extends AppCompatActivity {
                     //datiScaricati = true;
                     //rigaAdapter.notifyAll();
 
-
-                    //for(Giocatore giocatore : giocatori){
-                      //  if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
-                        //    myUsername.setText(giocatore.getUsername());
-                          //  return;
-                        //}
-                   // }
                     // This method is called once with the initial value and again whenever data at this location is updated.
                     //String value = snapshot.getValue(String.class);
                     //Log.d(TAG, "Value is: " + value);

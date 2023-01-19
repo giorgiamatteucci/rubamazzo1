@@ -4,18 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class MenuActivity extends AppCompatActivity {
 
-    Button btnGioca, btnCrea, btnClassifica, btnLogout;
+    Button btnRegole, btnGioca, btnCrea, btnClassifica, btnLogout;
     TextView tvUser;
 
     @Override
@@ -24,15 +30,33 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         tvUser = findViewById(R.id.tvUser);
-        tvUser.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        //HO PROVATO A STAMPARE L'USERNAME MA NON CI SONO RIUSCITA
-        //tvUser.setText(FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/username").toString());
-        //DatabaseReference user = FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/username");
-
+        FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot :snapshot.getChildren()){
+                    Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) dataSnapshot.getValue());
+                    if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                        tvUser.setText(giocatore.getUsername());
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.d("TAG", "Failed to read value.", error.toException());
+            }
+        });
+        btnRegole = findViewById(R.id.btnRegole);
         btnGioca = findViewById(R.id.btnGioca);
         btnCrea = findViewById(R.id.btnCrea);
         btnClassifica = findViewById(R.id.btnClassifica);
         btnLogout = findViewById(R.id.btnLogout);
+
+        btnRegole.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MenuActivity.this, RegoleActivity.class));
+            }
+        });
 
         btnGioca.setOnClickListener(new View.OnClickListener() {
             @Override

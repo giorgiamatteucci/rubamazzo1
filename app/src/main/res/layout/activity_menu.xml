@@ -11,58 +11,80 @@
         android:id="@+id/btnGioca"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="Gioca ora"
+        android:text="@string/gioca"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18" />
+        app:layout_constraintVertical_bias="0.359" />
 
     <Button
         android:id="@+id/btnCrea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Crea partita"
+        android:text="@string/crea"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGioca"
-        app:layout_constraintVertical_bias="0.143" />
+        app:layout_constraintVertical_bias="0.193" />
 
     <Button
         android:id="@+id/btnClassifica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Classifica"
+        android:text="@string/classifica"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCrea"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintVertical_bias="0.218" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:text="logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnClassifica" />
+        app:layout_constraintTop_toBottomOf="@+id/btnClassifica"
+        app:layout_constraintVertical_bias="0.25" />
 
     <TextView
         android:id="@+id/tvUser"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/btnGioca"
+        android:layout_marginBottom="11dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegole"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnRegole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/regole"
+        app:layout_constraintBottom_toTopOf="@+id/btnGioca"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.733" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="202dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
