@@ -23,6 +23,8 @@ public class MenuActivity extends AppCompatActivity {
 
     Button btnRegole, btnGioca, btnCrea, btnClassifica, btnLogout;
     TextView tvUser;
+    DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,8 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         tvUser = findViewById(R.id.tvUser);
-        FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
+        //FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() { //funzionava anche così
+        dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()){

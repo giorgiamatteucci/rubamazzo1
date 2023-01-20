@@ -5,7 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -16,6 +20,8 @@ public class ActivityGiocoServer extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     CartaAdapter adapterSopra, adapterSotto;
     ArrayList<Carta> carteSotto, carteSopra;
+    //non so se sarà necessario il riferimento alla Connessione oppure Connessione/Partita
+    DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Connessione/");
 
 
     @Override
@@ -47,5 +53,30 @@ public class ActivityGiocoServer extends AppCompatActivity {
         carteSopra = new ArrayList<>();
         adapterSopra = new CartaAdapter(carteSopra);
         rvSopra.setAdapter(adapterSopra);
+
+        ivC1Server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        ivC2Server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        ivC3Server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        ivMazzoServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

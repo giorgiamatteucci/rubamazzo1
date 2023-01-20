@@ -33,6 +33,7 @@ public class ActivityClassifica extends AppCompatActivity {
     RigaAdapter rigaAdapter;
     ArrayList<Giocatore> giocatori;
     TextView myUsername;
+    private int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class ActivityClassifica extends AppCompatActivity {
         rvClassifica = findViewById(R.id.rvClassifica);
         layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL,false);
         rvClassifica.setLayoutManager(layoutManager);
-        //giocatori = new ArrayList<>();
+        giocatori = new ArrayList<>();
         //-------------------------
         getGiocatori();//prova();
         //-------------------------
@@ -69,42 +70,6 @@ public class ActivityClassifica extends AppCompatActivity {
     }
 
     private void getGiocatori(){
-        /*if(FirebaseDatabase.getInstance().getReference("Giocatore").getDatabase() == null){
-            Log.d("TAG01","database vuoto");
-        }else{
-            Log.d("TAG01","database pieno");
-            DatabaseReference a = FirebaseDatabase.getInstance().getReference("Giocatore");
-            DatabaseReference b = a.child("y9qG8DeNyMbEFkmvKqG7IUyauBp2");
-
-        }*/
-
-/*
-        Log.d("TAG01",FirebaseDatabase.getInstance().getReference("Giocatore").toString());
-        Task<DataSnapshot> starnafaz =  FirebaseDatabase.getInstance().getReference("Giocatore").get();
-        Log.d("TAG01",""+starnafaz.isSuccessful());
-        Log.d("TAG01",""+starnafaz.isComplete());
-
-        do{
-            Log.d("TAG01","Aspetta dio cane "+starnafaz.isComplete()+" "+starnafaz.isSuccessful());
-        }while(starnafaz.isComplete() == false || starnafaz.isSuccessful() == false);
-
-        Log.d("TAG01",FirebaseDatabase.getInstance().getReference("Giocatore").get().getResult().toString());
-        DataSnapshot snapshot = FirebaseDatabase.getInstance().getReference("Giocatore").get().getResult();
-        Log.d("TAG01",snapshot.toString());
-        Log.d("TAG01",snapshot.getChildren().toString());
-
-        for(DataSnapshot dataSnapshot :snapshot.getChildren()){
-
-            Log.d("TAG01"," 1 - "+ dataSnapshot.getValue().toString());
-            HashMap hasmap = (HashMap) dataSnapshot.getValue();
-            Log.d("TAG01", " 2 - "+hasmap.toString());
-            Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
-            Log.d("TAG01"," 3 - "+ giocatore.toString());
-            giocatori.add(giocatore);
-            Log.d("TAG01"," 4 - "+giocatori.size());
-        }*/
-
-        // Read from the database PROVA
            FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
@@ -117,8 +82,12 @@ public class ActivityClassifica extends AppCompatActivity {
                         Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
                         Log.d("TAG01"," 3 - "+ giocatore.toString());
                         giocatori.add(giocatore);
-                        Log.d("TAG01"," 4 - "+giocatori.size());
+
+                        i++;
                     }
+                    Log.d("TAG01"," 4 - "+giocatori.size());
+                    //rigaAdapter.notifyDataSetChanged();//FATAL EXCEPTION java.lang.StringIndexOutOfBoundsException: length=3; index=4
+                    //rvClassifica.scrollToPosition(giocatori.size()-i); //FATAL EXCEPTION java.lang.StringIndexOutOfBoundsException: length=3; index=4
 
                     //datiScaricati = true;
                     //rigaAdapter.notifyAll();
@@ -133,12 +102,10 @@ public class ActivityClassifica extends AppCompatActivity {
                 }
             });
     }
-    private void prova(){
-
+    /*private void prova(){
         for(int i=0;i<10;i++){
             Giocatore giocatore = new Giocatore("enricoluc@gmail.com","",10-i,10);
             giocatori.add(giocatore);
         }
-
-    }
+    }*/
 }
