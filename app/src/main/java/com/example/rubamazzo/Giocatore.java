@@ -36,4 +36,8 @@ public class Giocatore {
     public void setPassword(String password){ this.password=password;}
     public void incNVittorie(){nVittorie++;}
     public void incNPartite(){nPartite++;}
+
+    public String toStringCustom(){
+        return "email: "+this.email+" password: "+this.password+" username: "+this.username+" nPartite: "+this.nPartite+" nVittorie: "+this.nVittorie;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.rubamazzo;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,15 +41,21 @@ public class RigaAdapter  extends RecyclerView.Adapter<RigaAdapter.CardViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
+
         holder.tvPosizione.setText(""+(position+1));
         holder.tvEmail.setText(dataset.get(position).getEmail());
-        Float perc = ((float)dataset.get(position).getNVittorie()/dataset.get(position).getNPartite())*100;
 
         String percVittorie;
-        if(perc == 100.0){
-            percVittorie = Float.toString(perc).substring(0,5)+" %";
+        if(dataset.get(position).getNVittorie()==0 && dataset.get(position).getNPartite()==0) {
+            percVittorie = "0 %";
         }else{
-            percVittorie = Float.toString(perc).substring(0,4)+" %";
+            Float perc = ((float) dataset.get(position).getNVittorie() / dataset.get(position).getNPartite()) * 100;
+
+            if (perc == 100.0) {
+                percVittorie = Float.toString(perc).substring(0, 5) + " %";
+            } else {
+                percVittorie = Float.toString(perc).substring(0, 4) + " %";
+            }
         }
 
         holder.tvPercVittorie.setText(percVittorie);

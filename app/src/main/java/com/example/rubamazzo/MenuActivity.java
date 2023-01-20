@@ -36,7 +36,11 @@ public class MenuActivity extends AppCompatActivity {
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()){
+                    Log.d("TAG01",dataSnapshot.toString());
+                    // S.E. aggiungerei al giocatore l'attributo key - lo si prende facendo dataSnapshot dataSnapshot.getKey()
+                    //      DataSnapshot { key = dBlxEuK1DwNwjSS7qeKVj9bb6UV2, value = {password=mattia, npartite=0, nvittorie=0, email=mattia@gmail.com, username=mattia} }
                     Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) dataSnapshot.getValue());
                     if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                         tvUser.setText(giocatore.getUsername());

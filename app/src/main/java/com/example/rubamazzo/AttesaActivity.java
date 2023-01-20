@@ -1,10 +1,7 @@
 package com.example.rubamazzo;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -83,6 +80,33 @@ public class AttesaActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError error) {
             }
         });
+
+        /*
+            S.E.
+
+            la struttura che farei io è questa:
+               Partita
+                - server: id
+                - client: id
+                - idComunicazione? non lo so, devi capire come fare la comunicazione
+
+                le comunicazioni da fare sono ad esempio:
+                - le tue carte sono..
+                - il tuo avversario ho fatto questa mossa...
+
+                e chi riceve la comunicazione deve far vedere sul display la modifica
+
+            if(client){
+                forech(){
+                    if(client==""){
+                        "mi collego" alla prima partita
+                        break;
+                    }
+            }else{
+                //server
+                creo una partita e metto il mio id nella voce server
+            }
+        */
 
 
         if(getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")){
