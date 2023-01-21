@@ -6,7 +6,7 @@ public class Utils {
 
     public static Giocatore getGiocatoreFromHashMap(HashMap hashmap){
 
-        return new Giocatore((String) hashmap.get("username"),(String) hashmap.get("email"),(String) hashmap.get("password"));
+        return new Giocatore((String) hashmap.get("key"), (String) hashmap.get("username"),(String) hashmap.get("email"),(String) hashmap.get("password"));
 
     }
 

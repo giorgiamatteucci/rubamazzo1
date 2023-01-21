@@ -66,7 +66,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     //creare e registrare su db l'account creato
-                                    FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new Giocatore(username, email, password));
+                                    FirebaseDatabase.getInstance().getReference("Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new Giocatore(FirebaseAuth.getInstance().getCurrentUser().getUid(), username, email, password));
 
                                     Toast.makeText(RegistrazioneActivity.this, "Autenticazione creata.", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(getApplicationContext() , EntraActivity.class);

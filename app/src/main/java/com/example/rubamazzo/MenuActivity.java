@@ -39,8 +39,6 @@ public class MenuActivity extends AppCompatActivity {
 
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()){
                     Log.d("TAG01",dataSnapshot.toString());
-                    // S.E. aggiungerei al giocatore l'attributo key - lo si prende facendo dataSnapshot dataSnapshot.getKey()
-                    //      DataSnapshot { key = dBlxEuK1DwNwjSS7qeKVj9bb6UV2, value = {password=mattia, npartite=0, nvittorie=0, email=mattia@gmail.com, username=mattia} }
                     Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) dataSnapshot.getValue());
                     if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                         tvUser.setText(giocatore.getUsername());
@@ -62,6 +60,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MenuActivity.this, RegoleActivity.class));
+                finish();
             }
         });
 
@@ -74,6 +73,7 @@ public class MenuActivity extends AppCompatActivity {
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di essere aggiunto ad una partita");
                 startActivity(i);
+                finish();
             }
         });
 
@@ -85,6 +85,7 @@ public class MenuActivity extends AppCompatActivity {
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
                 startActivity(i);
+                finish();
             }
         });
 
@@ -93,6 +94,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
                 startActivity(i);
+                finish();
             }
         });
 

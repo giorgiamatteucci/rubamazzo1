@@ -1,18 +1,21 @@
 package com.example.rubamazzo;
 
 public class Partita {
-    private Giocatore client, server;
-    private boolean iniziata;
+    private String idClient, idServer;
+   // private boolean iniziata;
 
-    public Partita(Giocatore server) {
-        iniziata = false;
-        this.server=server;
+    public Partita(String idClient, String idServer) {
+       // iniziata = false;
+        this.idClient=idClient;
+        this.idServer=idServer;
     }
-    public Giocatore getServer(){return server;}
-    public Giocatore getClient(){return client;}
-    public boolean isIniziata(){return iniziata;}
 
-    public void setIniziata(){ iniziata=true;}
-    public void setClient(Giocatore client){this.client=client;}
+   // public boolean isIniziata(){return iniziata;}
+    public String getIdClient(){return idClient;}
+    public String getIdServer(){return idServer;}
+
+   // public void setIniziata(){ iniziata=true;}
+    public void setIdClient(String idClient){this.idClient=idClient;}
+    public void setIdServer(String idServer){this.idServer=idServer;}
 
 }

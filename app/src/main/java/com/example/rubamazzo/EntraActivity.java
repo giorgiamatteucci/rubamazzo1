@@ -17,13 +17,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class EntraActivity extends AppCompatActivity {
-
     TextView etEmail, etPassword;
     Button btnAccedi;
     FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +35,10 @@ public class EntraActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
 
         btnAccedi = findViewById(R.id.btnAccedi);
-
         btnAccedi.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-
-                Log.d("1234","click su accedi - EntraActivity");
 
                 String email, password;
                 email = String.valueOf(etEmail.getText());
@@ -62,28 +58,17 @@ public class EntraActivity extends AppCompatActivity {
                     }
                 }
 
-                Log.d("1234"," invio messaggio a firebase");
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                Log.d("1234"," ricevo risposta");
-                                Log.d("1234",task.toString());
-
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(getApplicationContext(), "Login ok.",Toast.LENGTH_SHORT).show();
-                                    //updateUI(user);
-
                                     Intent i = new Intent(EntraActivity.this, MenuActivity.class);
                                     startActivity(i);
                                     finish();
                                 } else {
-                                    // If sign in fails, display a message to the user.
-                                    //Log.w(TAG, "signInWithEmail:failure", task.getException());
                                     Toast.makeText(EntraActivity.this, "Credenziali errrate.",Toast.LENGTH_SHORT).show();
-                                    //updateUI(null);
                                 }
                             }
                         });

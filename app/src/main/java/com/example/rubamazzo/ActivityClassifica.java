@@ -33,7 +33,6 @@ public class ActivityClassifica extends AppCompatActivity {
     RigaAdapter rigaAdapter;
     ArrayList<Giocatore> giocatori;
     TextView myUsername;
-    //private int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,20 +81,18 @@ public class ActivityClassifica extends AppCompatActivity {
 
                 Log ottenuti dall'esecuzione di questo metodo
                 2023-01-20 22:13:32.466 17222-17222/com.example.rubamazzo D/TAG01: miracolooooooooo
-                2023-01-20 22:13:32.466 17222-17222/com.example.rubamazzo D/TAG01: DataSnapshot { key = CSG1VmxWBaeBxBMVRLrMaqYbscG3, value = {password=giorgia, npartite=0, nvittorie=0, email=giorgia@gmail.com, username=gioMatt} }
+                2023-01-20 22:13:32.466 17222-17222/com.example.rubamazzo D/TAG01: DataSnapshot { key = 1ZvMssdfWZdqNwOVAGiIpGkXZ272, value = {password=giorgia, npartite=0, nvittorie=0, email=giorgia@gmail.com, username=gioMatt} }
          */
 
-        String idPlayer ="CSG1VmxWBaeBxBMVRLrMaqYbscG3";
+        String idPlayer ="1ZvMssdfWZdqNwOVAGiIpGkXZ272";
         FirebaseDatabase.getInstance().getReference("Giocatore/"+idPlayer).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
                 Log.d("TAG01","miracolooooooooo");
                 Log.d("TAG01",snapshot.toString());
             }
             @Override
             public void onCancelled(DatabaseError error) {
-                Log.d(TAG, "Failed to read value.", error.toException());
             }
         });
     }
@@ -105,23 +102,14 @@ public class ActivityClassifica extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     for(DataSnapshot dataSnapshot :snapshot.getChildren()){
-
                         //Log.d("TAG01"," 1 - "+ dataSnapshot.getValue().toString());
                         HashMap hasmap = (HashMap) dataSnapshot.getValue();
                         //Log.d("TAG01", " 2 - "+hasmap.toString());
                         Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
                         //Log.d("TAG01"," 3 - "+ giocatore.toString());
                         giocatori.add(giocatore);
-
-                        //i++;
                     }
-                    //Log.d("TAG01"," 4 - "+giocatori.size());
                     rigaAdapter.notifyDataSetChanged();
-                    //FATAL EXCEPTION java.lang.StringIndexOutOfBoundsException: length=3; index=4
-                    //rvClassifica.scrollToPosition(giocatori.size()-i); //FATAL EXCEPTION java.lang.StringIndexOutOfBoundsException: length=3; index=4
-
-                    //datiScaricati = true;
-                    //rigaAdapter.notifyAll();
 
                     // This method is called once with the initial value and again whenever data at this location is updated.
                     //String value = snapshot.getValue(String.class);
@@ -133,10 +121,4 @@ public class ActivityClassifica extends AppCompatActivity {
                 }
             });
     }
-    /*private void prova(){
-        for(int i=0;i<10;i++){
-            Giocatore giocatore = new Giocatore("enricoluc@gmail.com","",10-i,10);
-            giocatori.add(giocatore);
-        }
-    }*/
 }

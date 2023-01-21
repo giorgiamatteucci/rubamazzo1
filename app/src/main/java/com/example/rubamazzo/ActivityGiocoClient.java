@@ -20,8 +20,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     CartaAdapter adapterSopra, adapterSotto;
     ArrayList<Carta> carteSotto, carteSopra;
-    //non so se sarà necessario il riferimento alla Connessione oppure Connessione/Partita
-    DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Connessione/");
+    DatabaseReference dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
