@@ -46,21 +46,46 @@ public class AttesaActivity extends AppCompatActivity {
             }
         });
 
-        if(getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")){//CLIENT
+        if (getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")) {//CLIENT
 
-            dbReference.child("Partita/").addValueEventListener(new ValueEventListener() {
+            dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getChildrenCount()==0){
+                    if (dataSnapshot.getChildrenCount() == 0) {
                         Toast.makeText(AttesaActivity.this, "Ancora non ci sono partite a cui unirsi.", Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        int i =0;
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            i++;
+                            Log.d("TAG02"," partita n"+i);
+
+                            String idPartita = snapshot.getKey();
+                            Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
+
+                            if(partita.getIdClient().isEmpty()){
+                                Log.d("TAG02"," partita n"+i+" libera");
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita+"/idClient").setValue(id);
+                                Intent intent = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
+                                intent.putExtra("idPartita", idPartita);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            }
+                        }
                     }
-                    if(dataSnapshot.getChildrenCount()==1){//CONTROLLARE CHE IL CLIENT NON SIA UGUALE AL SERVER
+
+                    if (dataSnapshot.getChildrenCount() == 1) {//CONTROLLARE CHE IL CLIENT NON SIA UGUALE AL SERVER
+
+                        Log.d("TAG01", dataSnapshot.toString());
+                        //(HashMap) dataSnapshot.getValue().get("username")
                         //dbReference.child("Partita/").child("idClient").push().setValue(id);
                         //dbReference.child("Partita/").child("idClient").child("id_giocatore").getRef().setValue(id);
                         dbReference.child("Partita/").child(id).child("tipo_giocatore").getRef().setValue("client");
                         Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
                     }
-                    if(dataSnapshot.getChildrenCount()==2){
+                    if (dataSnapshot.getChildrenCount() == 2) {
                         Intent i = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
                         //i.putExtra();
                         startActivity(i);
@@ -69,63 +94,45 @@ public class AttesaActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(DatabaseError databaseError) {
+                }
             });
-        }
-        else {//SERVER
+        } else {//SERVER
 
-            dbReference.child("Partita/").addValueEventListener(new ValueEventListener() {
+            // ok
+            dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
+
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getChildrenCount()==0){
-                    /*String idConnessione = String.valueOf(System.currentTimeMillis());
-                    String idGiocatore = String.valueOf(System.currentTimeMillis());
-                    dataSnapshot.child(idConnessione).child(idGiocatore).child("id_giocatore").getRef().setValue(id);*/
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String idPartita = String.valueOf(System.currentTimeMillis());
 
-                        //dbReference.child("Partita/").child("idServer").push().setValue(id);
-                        //dbReference.child("Partita/").child("idServer").child("id_giocatore").getRef().setValue(id);
-                        dbReference.child("Partita/").child(id).child("tipo_giocatore").getRef().setValue("server");
-                        Toast.makeText(AttesaActivity.this, "Partita creata.", Toast.LENGTH_SHORT).show();
-                    }
-                    if(dataSnapshot.getChildrenCount()==1){//CONTROLLARE CHE IL SEREVER NON SIA UGUALE AL CLIENT
-                        Toast.makeText(AttesaActivity.this, "Attendi un giocatore.", Toast.LENGTH_SHORT).show();
-                    }
-                    if(dataSnapshot.getChildrenCount()==2){
-                        startActivity(new Intent(AttesaActivity.this, ActivityGiocoServer.class));
-                        finish();
-                    }
+                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(new Partita("", id));
+
+                    // Da testare
+                    dbReference.child("Partita/" + idPartita).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
+                            if (!partita.getIdClient().isEmpty()) {
+                                Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
+                                i.putExtra("idPartita", idPartita);
+                                startActivity(i);
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
             });
         }
-
     }
 }
-/*
-            S.E.
-
-            la struttura che farei io è questa:
-               Partita
-                - server: id
-                - client: id
-                - idComunicazione? non lo so, devi capire come fare la comunicazione
-
-                le comunicazioni da fare sono ad esempio:
-                - le tue carte sono..
-                - il tuo avversario ho fatto questa mossa...
-
-                e chi riceve la comunicazione deve far vedere sul display la modifica
-
-            if(client){
-                forech(){
-                    if(client==""){
-                        "mi collego" alla prima partita
-                        break;
-                    }
-            }else{
-                //server
-                creo una partita e metto il mio id nella voce server
-            }
-        */
