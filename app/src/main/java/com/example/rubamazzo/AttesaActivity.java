@@ -109,7 +109,7 @@ public class AttesaActivity extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(new Partita("", id));
 
                     // Da testare
-                    dbReference.child("Partita/" + idPartita).addListenerForSingleValueEvent(new ValueEventListener() {
+                    dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
@@ -117,6 +117,7 @@ public class AttesaActivity extends AppCompatActivity {
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
                                 startActivity(i);
+                                dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();
                             }
                         }
