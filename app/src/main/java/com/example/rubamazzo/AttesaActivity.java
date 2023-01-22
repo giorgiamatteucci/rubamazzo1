@@ -48,13 +48,16 @@ public class AttesaActivity extends AppCompatActivity {
 
         if(getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")){//CLIENT
 
-            //dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
             dbReference.child("Partita/").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getChildrenCount()==1){
-                        dbReference.child("Partita/").child("idClient").push().setValue(id);
-                        //dbReference.child("Partita/").child(id).push().setValue("idClient");
+                    if(dataSnapshot.getChildrenCount()==0){
+                        Toast.makeText(AttesaActivity.this, "Ancora non ci sono partite a cui unirsi.", Toast.LENGTH_SHORT).show();
+                    }
+                    if(dataSnapshot.getChildrenCount()==1){//CONTROLLARE CHE IL CLIENT NON SIA UGUALE AL SERVER
+                        //dbReference.child("Partita/").child("idClient").push().setValue(id);
+                        //dbReference.child("Partita/").child("idClient").child("id_giocatore").getRef().setValue(id);
+                        dbReference.child("Partita/").child(id).child("tipo_giocatore").getRef().setValue("client");
                         Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
                     }
                     if(dataSnapshot.getChildrenCount()==2){
@@ -75,9 +78,17 @@ public class AttesaActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getChildrenCount()==0){
-                        dbReference.child("Partita/").child("idServer").push().setValue(id);
-                        //dbReference.child("Partita/").child(id).push().setValue("idServer");
+                    /*String idConnessione = String.valueOf(System.currentTimeMillis());
+                    String idGiocatore = String.valueOf(System.currentTimeMillis());
+                    dataSnapshot.child(idConnessione).child(idGiocatore).child("id_giocatore").getRef().setValue(id);*/
+
+                        //dbReference.child("Partita/").child("idServer").push().setValue(id);
+                        //dbReference.child("Partita/").child("idServer").child("id_giocatore").getRef().setValue(id);
+                        dbReference.child("Partita/").child(id).child("tipo_giocatore").getRef().setValue("server");
                         Toast.makeText(AttesaActivity.this, "Partita creata.", Toast.LENGTH_SHORT).show();
+                    }
+                    if(dataSnapshot.getChildrenCount()==1){//CONTROLLARE CHE IL SEREVER NON SIA UGUALE AL CLIENT
+                        Toast.makeText(AttesaActivity.this, "Attendi un giocatore.", Toast.LENGTH_SHORT).show();
                     }
                     if(dataSnapshot.getChildrenCount()==2){
                         startActivity(new Intent(AttesaActivity.this, ActivityGiocoServer.class));
