@@ -1,17 +1,24 @@
 package com.example.rubamazzo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ActivityGiocoClient extends AppCompatActivity {
 
@@ -20,7 +27,8 @@ public class ActivityGiocoClient extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     CartaAdapter adapterSopra, adapterSotto;
     ArrayList<Carta> carteSotto, carteSopra;
-    DatabaseReference dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/");
+    DatabaseReference dbRefPartita;
+    String idPartita;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,10 @@ public class ActivityGiocoClient extends AppCompatActivity {
         adapterSopra = new CartaAdapter(carteSopra);
         rvSopra.setAdapter(adapterSopra);
 
+        idPartita = getIntent().getStringExtra("idPartita");
+        dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
+
+
         ivC1Client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +89,25 @@ public class ActivityGiocoClient extends AppCompatActivity {
             }
         });
 
-        prova();
+        //prova();
+        ivC1Server.setImageResource(R.drawable.retro);
+        ivC2Server.setImageResource(R.drawable.retro);
+        ivC3Server.setImageResource(R.drawable.retro);
+
+        //dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRefPartita.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("TAG5","dataSnapshot.child(idPartita).child(\"c1client\").getValue(): " + dataSnapshot.child(idPartita).child("c1client").getValue());
+                /*ivC1Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c1client").getValue());// RISULTA ESSERE null  /Partita/1674466989995/c1client
+                ivC2Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c2client").getValue());
+                ivC3Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c3client").getValue());*/
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {   }
+        });
+
     }
 
     void prova(){

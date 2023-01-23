@@ -29,6 +29,8 @@ public class AttesaActivity extends AppCompatActivity {
     DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
     String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+    Partita partita;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,18 +56,11 @@ public class AttesaActivity extends AppCompatActivity {
                     if (dataSnapshot.getChildrenCount() == 0) {
                         Toast.makeText(AttesaActivity.this, "Ancora non ci sono partite a cui unirsi.", Toast.LENGTH_SHORT).show();
                     }else {
-
-                        int i =0;
-
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            i++;
-                            Log.d("TAG02"," partita n"+i);
-
                             String idPartita = snapshot.getKey();
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
 
-                            if(partita.getIdClient().isEmpty()){
-                                Log.d("TAG02"," partita n"+i+" libera");
+                            if(partita.getIdClient().isEmpty() ){//&& !(id.equals(snapshot.child("idServer").getValue()))){ //  TODO: Da scommentare una volta finiti i
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita+"/idClient").setValue(id);
                                 Intent intent = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
                                 intent.putExtra("idPartita", idPartita);
@@ -75,22 +70,6 @@ public class AttesaActivity extends AppCompatActivity {
                             }
                         }
                     }
-
-                    if (dataSnapshot.getChildrenCount() == 1) {//CONTROLLARE CHE IL CLIENT NON SIA UGUALE AL SERVER
-
-                        Log.d("TAG01", dataSnapshot.toString());
-                        //(HashMap) dataSnapshot.getValue().get("username")
-                        //dbReference.child("Partita/").child("idClient").push().setValue(id);
-                        //dbReference.child("Partita/").child("idClient").child("id_giocatore").getRef().setValue(id);
-                        dbReference.child("Partita/").child(id).child("tipo_giocatore").getRef().setValue("client");
-                        Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
-                    }
-                    if (dataSnapshot.getChildrenCount() == 2) {
-                        Intent i = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
-                        //i.putExtra();
-                        startActivity(i);
-                        finish();
-                    }
                 }
 
                 @Override
@@ -98,17 +77,14 @@ public class AttesaActivity extends AppCompatActivity {
                 }
             });
         } else {//SERVER
-
-            // ok
             dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String idPartita = String.valueOf(System.currentTimeMillis());
+                    partita = new Partita("", id);
+                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);
 
-                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(new Partita("", id));
-
-                    // Da testare
                     dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -116,6 +92,8 @@ public class AttesaActivity extends AppCompatActivity {
                             if (!partita.getIdClient().isEmpty()) {
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
+                                i.putExtra("idClient", partita.getIdClient());
+                                i.putExtra("idServer", partita.getIdServer());
                                 startActivity(i);
                                 dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();
@@ -123,16 +101,12 @@ public class AttesaActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
+                        public void onCancelled(@NonNull DatabaseError error) {   }
                     });
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
+                public void onCancelled(@NonNull DatabaseError error) {   }
             });
         }
     }
