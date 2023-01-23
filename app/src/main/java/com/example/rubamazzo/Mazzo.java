@@ -55,7 +55,7 @@ public class Mazzo extends ArrayList<Carta> {
     public Carta estraiCarta(){
         Carta car;
         do{
-            car = this.get(random.nextInt(40)); //NON SO SE VA BENE
+            car = this.get(random.nextInt(40));
         }while(car.isEstratta());
         car.setEstrazione();
         return car;
@@ -69,4 +69,6 @@ public class Mazzo extends ArrayList<Carta> {
         }
         return null;
     }
+
+    //Creare un metodo che mi dice quando il mazzo è vuoto isEmpty(), perchè quando non ci sono più carte da pescare.. finisce la partita
 }

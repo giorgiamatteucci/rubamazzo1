@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,10 @@ public class ActivityGiocoClient extends AppCompatActivity {
     CartaAdapter adapterSopra, adapterSotto;
     ArrayList<Carta> carteSotto, carteSopra;
     DatabaseReference dbRefPartita;
+    Mazzo mazzo = new Mazzo();
     String idPartita;
+    DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +98,27 @@ public class ActivityGiocoClient extends AppCompatActivity {
         ivC2Server.setImageResource(R.drawable.retro);
         ivC3Server.setImageResource(R.drawable.retro);
 
-        //dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
-        dbRefPartita.addValueEventListener(new ValueEventListener() {
+        dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
+        //dbRefPartita.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("TAG5","dataSnapshot.child(idPartita).child(\"c1client\").getValue(): " + dataSnapshot.child(idPartita).child("c1client").getValue());
-                /*ivC1Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c1client").getValue());// RISULTA ESSERE null  /Partita/1674466989995/c1client
-                ivC2Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c2client").getValue());
-                ivC3Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c3client").getValue());*/
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    //Log.d("TAG5", "snapshot: " + snapshot);
+                        //  PROVA A METTERE UN ALTRO FOR INTERNO CHE SCORRE AD UN LIVELLO SOTTO!
+                        //Log.d("TAG5", "snapshot.child(\"idServer\").getValue(): " + snapshot.child("idServer").getValue());
+                        //Log.d("TAG5", "snapshot.child(\"c1client\").getValue(): " + snapshot.child("c1client").getValue());
+                        //Log.d("TAG5", "idPartita: " + idPartita);
+                        // Log.d("TAG5","snapshot.child(\"c1client\").getValue(): " + String.valueOf(snapshot.child("c1client").getValue()));//MANDA IN CRUSH L'APP!
+
+                        //ivC1Client.setImageResource(mazzo.getCardById((String) snapshot.child("c1client").getValue()).getIdImmagine());//VERSIONE CON id invece che idImmagine
+                        //ivC1Client.setImageResource((Integer) snapshot.child("c1client").getValue());
+                        //Log.d("TAG5", "Dovrebbe restituire un valore a 10 cifre: " + (Integer) snapshot.child("c1client").getValue());
+                        //ivC1Client.setImageResource((Integer) snapshot.child("c1client").getValue());
+                        //ivC2Client.setImageResource((Integer) snapshot.child("c2client").getValue());//ivC2Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c2client").getValue());
+                        //ivC3Client.setImageResource((Integer) snapshot.child("c3client").getValue());
+                }
+                //break;
+                //dbRefPartita.removeEventListener(this);
             }
 
             @Override
@@ -110,21 +127,16 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
     }
 
-    void prova(){
+    /*void prova(){
         Mazzo mazzo = new Mazzo();
-
         ivC1Server.setImageResource(R.drawable.retro);
         ivC2Server.setImageResource(R.drawable.retro);
         ivC3Server.setImageResource(R.drawable.retro);
-
         ivC1Client.setImageResource(mazzo.estraiCarta().getIdImmagine());
         ivC2Client.setImageResource(mazzo.estraiCarta().getIdImmagine());
         ivC3Client.setImageResource(mazzo.estraiCarta().getIdImmagine());
-
         for(int i=0;i<6;i++){
-
             Carta carta = mazzo.estraiCarta();
-
             if(i%2==0){
                 carteSopra.add(carta);
                 adapterSopra.notifyItemInserted(carteSopra.size()-1);
@@ -133,6 +145,5 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 adapterSotto.notifyItemInserted(carteSotto.size()-1);
             }
         }
-
-    }
+    }*/
 }

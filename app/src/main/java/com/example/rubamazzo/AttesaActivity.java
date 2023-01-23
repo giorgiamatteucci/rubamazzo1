@@ -59,9 +59,10 @@ public class AttesaActivity extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             String idPartita = snapshot.getKey();
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
-
-                            if(partita.getIdClient().isEmpty() ){//&& !(id.equals(snapshot.child("idServer").getValue()))){ //  TODO: Da scommentare una volta finiti i
+                            //Log.d("TAG5", (String) snapshot.child("idServer").getValue());
+                            if(partita.getIdClient().isEmpty() && !(id.equals(snapshot.child("idServer").getValue()))){
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita+"/idClient").setValue(id);
+                                Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
                                 intent.putExtra("idPartita", idPartita);
                                 startActivity(intent);
@@ -84,6 +85,7 @@ public class AttesaActivity extends AppCompatActivity {
                     String idPartita = String.valueOf(System.currentTimeMillis());
                     partita = new Partita("", id);
                     FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);
+                    Toast.makeText(AttesaActivity.this, "Partita creata.", Toast.LENGTH_SHORT).show();
 
                     dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {
                         @Override

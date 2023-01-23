@@ -4,12 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +28,8 @@ public class ActivityGiocoServer extends AppCompatActivity {
     String idPartita, idClient, idServer;
     DatabaseReference dbRefPartita;
     Mazzo mazzo;
-    String c1client, c2client, c3client, c1server, c2server, c3server;
+    int  c1client, c2client, c3client, c1server, c2server, c3server;
+    //String c1client, c2client, c3client, c1server, c2server, c3server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,10 @@ public class ActivityGiocoServer extends AppCompatActivity {
         mazzo = new Mazzo();
 
         Log.d("TAGNUOVO", "dbRefPartita: "+String.valueOf(dbRefPartita));
-        estraiDalMazzo();
+        estraiDalMazzo3CarteGiocatori();
+        setCarteCentrali();
+        FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/").child(idClient);//per indicare il turno del client...?
+        //allora il server può giocare  //if(dbRefPartita.child(idServer)){         }
 
         ivC1Server.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,48 +99,48 @@ public class ActivityGiocoServer extends AppCompatActivity {
             }
         });
     }
-    private void estraiDalMazzo() {
+    private void setCarteCentrali(){
+        for(int i=0;i<4;i++){
+            Carta carta = mazzo.estraiCarta();
+            FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/carteCentrali").child(String.valueOf(System.currentTimeMillis())).setValue(carta.getId());
+            //SU FIREBASE IN CARTE CENTRALI VENGONO INSERITE PIU' DI 4 CARTE PER COLPA DI QUESTO METODO
+            if(i%2==0){
+                carteSopra.add(carta);
+                adapterSopra.notifyItemInserted(carteSopra.size()-1);
+            }else{
+                carteSotto.add(carta);
+                adapterSotto.notifyItemInserted(carteSotto.size()-1);
+            }
+        }
+        adapterSopra.notifyDataSetChanged();
+        adapterSotto.notifyDataSetChanged();
+    }
+    private void estraiDalMazzo3CarteGiocatori() {
         dbRefPartita.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                c1client = mazzo.estraiCarta().getId();
+                c1client = mazzo.estraiCarta().getIdImmagine();//c1client = mazzo.estraiCarta().getId();
                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/c1client").setValue(c1client);
-                c2client = mazzo.estraiCarta().getId();
+                c2client = mazzo.estraiCarta().getIdImmagine();//c2client = mazzo.estraiCarta().getId();
                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/c2client").setValue(c2client);
-                c3client = mazzo.estraiCarta().getId();
+                c3client = mazzo.estraiCarta().getIdImmagine();//c3client = mazzo.estraiCarta().getId();
                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/c3client").setValue(c3client);
                 //FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/carteClient").setValue(c1client + " " + c2client+ " " +c3client);
                 ivC1Client.setImageResource(R.drawable.retro);
                 ivC2Client.setImageResource(R.drawable.retro);
                 ivC3Client.setImageResource(R.drawable.retro);
 
-                c1server = mazzo.estraiCarta().getId();
+                c1server = mazzo.estraiCarta().getIdImmagine();//c1server = mazzo.estraiCarta().getId();
                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/c1server").setValue(c1server);
-                c2server = mazzo.estraiCarta().getId();
+                c2server = mazzo.estraiCarta().getIdImmagine();//c2server = mazzo.estraiCarta().getId();
                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/c2server").setValue(c2server);
-                c3server = mazzo.estraiCarta().getId();
+                c3server = mazzo.estraiCarta().getIdImmagine();//c3server = mazzo.estraiCarta().getId();
                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/c3server").setValue(c3server);
                 //FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/carteServer").setValue(c1server + " " +c2server + " " + c3server);
 
-                /*ivC1Server.setImageResource((Integer) dataSnapshot.child(idPartita).child("c1server").getValue());
-                ivC2Server.setImageResource((Integer) dataSnapshot.child(idPartita).child("c2server").getValue());
-                ivC3Server.setImageResource((Integer) dataSnapshot.child(idPartita).child("c3server").getValue());*/
-
-                for(int i=0;i<4;i++){
-                    Carta carta = mazzo.estraiCarta();
-                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/carteCentrali").child(String.valueOf(System.currentTimeMillis())).setValue(carta.getId());
-                    Log.d("TAGNUOVO", "carta.getIdImmagine(): "+carta.getIdImmagine());
-                    if(i%2==0){
-                        carteSopra.add(carta);
-                        adapterSopra.notifyItemInserted(carteSopra.size()-1);
-                    }else{
-                        carteSotto.add(carta);
-                        adapterSotto.notifyItemInserted(carteSotto.size()-1);
-                    }
-                }
-                adapterSopra.notifyDataSetChanged();
-                adapterSotto.notifyDataSetChanged();
-
+                /*ivC1Server.setImageResource((Integer) dataSnapshot.child("c1server").getValue());
+                ivC2Server.setImageResource((Integer) dataSnapshot.child("c2server").getValue());
+                ivC3Server.setImageResource((Integer) dataSnapshot.child("c3server").getValue());*/
             }
 
             @Override
