@@ -83,7 +83,7 @@ public class AttesaActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String idPartita = String.valueOf(System.currentTimeMillis());
-                    partita = new Partita("", id);
+                    partita = new Partita("", id,"","");
                     FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);
                     Toast.makeText(AttesaActivity.this, "Partita creata.", Toast.LENGTH_SHORT).show();
 

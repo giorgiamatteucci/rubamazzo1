@@ -2,12 +2,14 @@ package com.example.rubamazzo;
 
 public class Partita {
     private String idClient, idServer;
+    private String carteClient, carteServer;
    // private boolean iniziata;
 
-    public Partita(String idClient, String idServer) {
-       // iniziata = false;
+    public Partita(String idClient, String idServer, String carteClient,String carteServer) {
         this.idClient=idClient;
         this.idServer=idServer;
+        this.carteClient=carteClient;
+        this.carteServer=carteServer;
     }
 
    // public boolean isIniziata(){return iniziata;}

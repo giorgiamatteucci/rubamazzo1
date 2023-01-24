@@ -29,7 +29,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
     CartaAdapter adapterSopra, adapterSotto;
     ArrayList<Carta> carteSotto, carteSopra;
     DatabaseReference dbRefPartita;
-    Mazzo mazzo = new Mazzo();
+    //Mazzo mazzo = new Mazzo();
     String idPartita;
     DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
 
@@ -67,6 +67,26 @@ public class ActivityGiocoClient extends AppCompatActivity {
         idPartita = getIntent().getStringExtra("idPartita");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
 
+        /*dbReference.addValueEventListener(new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    HashMap dataMap = (HashMap ) dataSnapshot.getValue();
+                    for (Chiave stringa: dataMap.keySet()){
+                        Dati oggetto = dataMap.get(chiave);
+                        try{
+                            HashMap userData = (HashMap ) dati;
+                            Utente mUser = new User((String) userData.get("name"), (int) (long) userData.get("age"));
+                            addTextToView(mUser.getName() + " - " + Integer.toString(mUser.getAge()));
+                        }catch (ClassCastException cce){ // Se non è possibile eseguire il cast dell'oggetto in HashMap, significa che è di tipo String.
+                            try{
+                                String mString = String.valueOf(dataMap.get(chiave));
+                                addTextToView(mString);
+                            }catch (ClassCastException cce2){ } } }
+                       }
+                 }
+            @Override public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });*/
+
 
         ivC1Client.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,22 +123,22 @@ public class ActivityGiocoClient extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //Log.d("TAG5", "snapshot: " + snapshot);
-                        //  PROVA A METTERE UN ALTRO FOR INTERNO CHE SCORRE AD UN LIVELLO SOTTO!
-                        //Log.d("TAG5", "snapshot.child(\"idServer\").getValue(): " + snapshot.child("idServer").getValue());
-                        //Log.d("TAG5", "snapshot.child(\"c1client\").getValue(): " + snapshot.child("c1client").getValue());
-                        //Log.d("TAG5", "idPartita: " + idPartita);
-                        // Log.d("TAG5","snapshot.child(\"c1client\").getValue(): " + String.valueOf(snapshot.child("c1client").getValue()));//MANDA IN CRUSH L'APP!
+                    if (idPartita.equals(snapshot.getKey())) {
+                        String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
+                        Log.d("TAG5", "snapshot.child(\"idClient\").getValue(): " + snapshot.child("idClient").getValue());
+                        Log.d("TAG5", "snapshot.child(\"idServer\").getValue(): " + snapshot.child("idServer").getValue());
+                        Log.d("TAG5", "idPartita: " + snapshot.getKey());
+                        Log.d("TAG5", "carteClient: " + snapshot.child("carteClient").getValue());
+                        Log.d("TAG5", "carteServer: " + snapshot.child("carteServer").getValue());
+                        Log.d("TAG5", "c1client: " + carteClient[0]);
+                        Log.d("TAG5", "c2client: " + carteClient[1]);
+                        Log.d("TAG5", "c3client: " + carteClient[2]);
 
-                        //ivC1Client.setImageResource(mazzo.getCardById((String) snapshot.child("c1client").getValue()).getIdImmagine());//VERSIONE CON id invece che idImmagine
-                        //ivC1Client.setImageResource((Integer) snapshot.child("c1client").getValue());
-                        //Log.d("TAG5", "Dovrebbe restituire un valore a 10 cifre: " + (Integer) snapshot.child("c1client").getValue());
-                        //ivC1Client.setImageResource((Integer) snapshot.child("c1client").getValue());
-                        //ivC2Client.setImageResource((Integer) snapshot.child("c2client").getValue());//ivC2Client.setImageResource((Integer) dataSnapshot.child(idPartita).child("c2client").getValue());
-                        //ivC3Client.setImageResource((Integer) snapshot.child("c3client").getValue());
+                        ivC1Client.setImageResource(Integer.parseInt(carteClient[0]));
+                        ivC2Client.setImageResource(Integer.parseInt(carteClient[1]));
+                        ivC3Client.setImageResource(Integer.parseInt(carteClient[2]));
+                    }
                 }
-                //break;
-                //dbRefPartita.removeEventListener(this);
             }
 
             @Override
