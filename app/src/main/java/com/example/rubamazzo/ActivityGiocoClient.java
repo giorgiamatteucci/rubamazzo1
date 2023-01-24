@@ -124,19 +124,19 @@ public class ActivityGiocoClient extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (idPartita.equals(snapshot.getKey())) {
-                        String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
+                        //String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
                         Log.d("TAG5", "snapshot.child(\"idClient\").getValue(): " + snapshot.child("idClient").getValue());
                         Log.d("TAG5", "snapshot.child(\"idServer\").getValue(): " + snapshot.child("idServer").getValue());
                         Log.d("TAG5", "idPartita: " + snapshot.getKey());
                         Log.d("TAG5", "carteClient: " + snapshot.child("carteClient").getValue());
                         Log.d("TAG5", "carteServer: " + snapshot.child("carteServer").getValue());
-                        Log.d("TAG5", "c1client: " + carteClient[0]);
-                        Log.d("TAG5", "c2client: " + carteClient[1]);
-                        Log.d("TAG5", "c3client: " + carteClient[2]);
+                        //Log.d("TAG5", "c1client: " + carteClient[0]);
+                        //Log.d("TAG5", "c2client: " + carteClient[1]);
+                        //Log.d("TAG5", "c3client: " + carteClient[2]);
 
-                        ivC1Client.setImageResource(Integer.parseInt(carteClient[0]));
-                        ivC2Client.setImageResource(Integer.parseInt(carteClient[1]));
-                        ivC3Client.setImageResource(Integer.parseInt(carteClient[2]));
+                        //ivC1Client.setImageResource(Integer.parseInt(carteClient[0]));
+                        //ivC2Client.setImageResource(Integer.parseInt(carteClient[1]));
+                        //ivC3Client.setImageResource(Integer.parseInt(carteClient[2]));
                     }
                 }
             }

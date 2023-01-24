@@ -84,7 +84,8 @@ public class AttesaActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String idPartita = String.valueOf(System.currentTimeMillis());
                     partita = new Partita("", id,"","");
-                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);
+                    Log.d("TAG5", "partita: " + partita.toString());
+                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);//non fa il comportamento atteso
                     Toast.makeText(AttesaActivity.this, "Partita creata.", Toast.LENGTH_SHORT).show();
 
                     dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {

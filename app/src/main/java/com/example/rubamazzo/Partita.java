@@ -15,9 +15,15 @@ public class Partita {
    // public boolean isIniziata(){return iniziata;}
     public String getIdClient(){return idClient;}
     public String getIdServer(){return idServer;}
+    public String getCarteClient(){return carteClient;}
+    public String getCarteServer(){return carteServer;}
 
    // public void setIniziata(){ iniziata=true;}
     public void setIdClient(String idClient){this.idClient=idClient;}
     public void setIdServer(String idServer){this.idServer=idServer;}
+
+    public String toString(){
+        return "idClient: " + idClient + ", idServer: " + idServer +", carteClient: " + carteClient + ", carteServer: " + carteServer;
+    }
 
 }

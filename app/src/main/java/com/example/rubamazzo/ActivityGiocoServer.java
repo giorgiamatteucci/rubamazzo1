@@ -75,27 +75,19 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
         ivC1Server.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-            }
+            public void onClick(View v) { }
         });
         ivC2Server.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-            }
+            public void onClick(View v) { }
         });
         ivC3Server.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-            }
+            public void onClick(View v) { }
         });
         ivMazzoServer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-            }
+            public void onClick(View v) { }
         });
     }
 
@@ -125,17 +117,16 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (idPartita.equals(snapshot.getKey())) {
-                        String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
-                        ivC1Server.setImageResource(Integer.parseInt(carteServer[0]));
-                        ivC2Server.setImageResource(Integer.parseInt(carteServer[1]));
-                        ivC3Server.setImageResource(Integer.parseInt(carteServer[2]));
+                        //String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
+                        //ivC1Server.setImageResource(Integer.parseInt(carteServer[0]));
+                        //ivC2Server.setImageResource(Integer.parseInt(carteServer[1]));
+                        //ivC3Server.setImageResource(Integer.parseInt(carteServer[2]));
                     }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
