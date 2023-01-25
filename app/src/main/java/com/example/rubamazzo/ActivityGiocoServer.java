@@ -79,8 +79,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
         ivC1Server.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //estraiDalMazzo3CarteGiocatori(); visualizzaCarte(); //TEST FATTO
-            }
+            public void onClick(View v) { }
         });
         ivC2Server.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,11 +89,19 @@ public class ActivityGiocoServer extends AppCompatActivity {
             @Override
             public void onClick(View v) { }
         });
-        ivMazzoServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
         ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
+        /*
+        su Firebase aggiungere il campo Turno che sarà valorizzato 'client' oppure 'server'
+        e in base al turno disabilitare gli onClick.
+
+         * if() c'è una carta all'interno della rw che ha lo stesso valore di quella selezionata
+         * (fare il controllo anche sul mazzo dell'avversario, salvare il numero di carte che ha in una varibile da creare)
+         * togliere la carta selezionata tra le sue e metterla tra quelle del mazzo (eliminare anche la carta della rw)
+         * altrimenti toast
+         *
+         * LA PARTITA FINISCE QUANDO SONO FINITE LE CARTE DEL MAZZO (creare il metodo isEmpty() nella classe Mazzo)
+         * VINCE CHI HA PIU' CARTE NEL MAZZO
+         * */
     }
 
     private void visualizzaCarte(){
@@ -103,6 +110,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (idPartita.equals(snapshot.getKey())) {
+                        Log.d("TAG5","sono dentro visualizzaCarte()");
                         String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
                         String[] carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
                         ivC1Server.setImageResource(Integer.parseInt(carteServer[0]));

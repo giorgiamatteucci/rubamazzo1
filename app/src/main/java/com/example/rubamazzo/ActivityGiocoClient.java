@@ -80,11 +80,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
             @Override
             public void onClick(View v) { }
         });
-        ivMazzoClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
         ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
+        /*
+         * if() c'è una carta all'interno della rw che ha lo stesso valore di quella selezionata
+         * togliere la carta selezionata tra le sue e metterla tra quelle del mazzo (eliminare anche la carta della rw)
+         * altrimenti toast
+         * */
 
         ivC1Server.setImageResource(R.drawable.retro);
         ivC2Server.setImageResource(R.drawable.retro);
