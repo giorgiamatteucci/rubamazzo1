@@ -126,18 +126,9 @@ public class ActivityGiocoClient extends AppCompatActivity {
             }
         };
 
-        ivC1Client.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
-        ivC2Client.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
-        ivC3Client.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
+        ivC1Client.setOnClickListener(onClick);
+        ivC2Client.setOnClickListener(onClick);
+        ivC3Client.setOnClickListener(onClick);
         ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
         /*
          * if() c'è una carta all'interno della rw che ha lo stesso valore di quella selezionata
@@ -165,9 +156,10 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 Log.d("TAG5", "c3client: " + carteClient[2]);
                 Log.d("TAG5", "carteCentrali: " + snapshot.child("carteCentrali").getValue());
 
-                ivC1Client.setImageResource(Integer.parseInt(carteClient[0]));
-                ivC2Client.setImageResource(Integer.parseInt(carteClient[1]));
-                ivC3Client.setImageResource(Integer.parseInt(carteClient[2]));
+                ivC1Client.setImageResource(mazzo.getCartaById(carteClient[0]).getIdImmagine());
+                ivC2Client.setImageResource(mazzo.getCartaById(carteClient[1]).getIdImmagine());
+                ivC3Client.setImageResource(mazzo.getCartaById(carteClient[2]).getIdImmagine());
+
                 for(int i=0;i<4;i++){//for (String c : carteCentrali) {
                     if(i%2==0){
                         carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
@@ -185,6 +177,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {   }
         });
 
+        scaricaStatoPartita();
     }
 
     private String getUpdateCarteClient(String id){
@@ -237,8 +230,8 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
                 Log.d("TAG-REFRESH"," step 3 ok");
 
-                nCarteMazzoClient = snapshot.child("nCarteMazzoC").getValue(Integer.class);
-                nCarteMazzoServer = snapshot.child("nCarteMazzoS").getValue(Integer.class);
+                nCarteMazzoClient = snapshot.child("nCarteMazzoC").getValue(Long.class).intValue();
+                nCarteMazzoServer = snapshot.child("nCarteMazzoS").getValue(Long.class).intValue();
 
                 String idCartaMazzoClient = snapshot.child("cartaMazzoC").getValue(String.class);
                 if(!idCartaMazzoClient.isEmpty()){

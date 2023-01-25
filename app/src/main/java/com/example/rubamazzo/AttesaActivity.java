@@ -111,7 +111,7 @@ public class AttesaActivity extends AppCompatActivity {
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/cartaMazzoC").setValue("");
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/nCarteMazzoC").setValue(0);
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/cartaMazzoS").setValue("");
-                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/mCarteMazzoS").setValue(0);
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/nCarteMazzoS").setValue(0);
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
