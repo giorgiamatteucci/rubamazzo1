@@ -32,8 +32,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
     DatabaseReference dbRefPartita;
     Mazzo mazzo = Mazzo.getIstance();
     String idPartita;
-    DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
-
+    //DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,39 +90,36 @@ public class ActivityGiocoClient extends AppCompatActivity {
         ivC2Server.setImageResource(R.drawable.retro);
         ivC3Server.setImageResource(R.drawable.retro);
 
-        dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (idPartita.equals(snapshot.getKey())) {
-                        String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
-                        String[] carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
-                        Log.d("TAG5", "snapshot.child(\"idClient\").getValue(): " + snapshot.child("idClient").getValue());
-                        Log.d("TAG5", "snapshot.child(\"idServer\").getValue(): " + snapshot.child("idServer").getValue());
-                        Log.d("TAG5", "idPartita: " + snapshot.getKey());
-                        Log.d("TAG5", "carteClient: " + snapshot.child("carteClient").getValue());
-                        Log.d("TAG5", "carteServer: " + snapshot.child("carteServer").getValue());
-                        Log.d("TAG5", "c1client: " + carteClient[0]);
-                        Log.d("TAG5", "c2client: " + carteClient[1]);
-                        Log.d("TAG5", "c3client: " + carteClient[2]);
-                        Log.d("TAG5", "carteCentrali: " + snapshot.child("carteCentrali").getValue());
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        ivC1Client.setImageResource(Integer.parseInt(carteClient[0]));
-                        ivC2Client.setImageResource(Integer.parseInt(carteClient[1]));
-                        ivC3Client.setImageResource(Integer.parseInt(carteClient[2]));
-                        for(int i=0;i<4;i++){//for (String c : carteCentrali) {
-                            if(i%2==0){
-                                carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
-                                adapterSopra.notifyItemInserted(carteSopra.size()-1);
-                            }else{
-                                carteSotto.add(mazzo.getCartaById(carteCentrali[i]));
-                                adapterSotto.notifyItemInserted(carteSotto.size()-1);
-                            }
-                        }
-                        adapterSopra.notifyDataSetChanged();
-                        adapterSotto.notifyDataSetChanged();
+                String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
+                String[] carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
+                Log.d("TAG5", "snapshot.child(\"idClient\").getValue(): " + snapshot.child("idClient").getValue());
+                Log.d("TAG5", "snapshot.child(\"idServer\").getValue(): " + snapshot.child("idServer").getValue());
+                Log.d("TAG5", "idPartita: " + snapshot.getKey());
+                Log.d("TAG5", "carteClient: " + snapshot.child("carteClient").getValue());
+                Log.d("TAG5", "carteServer: " + snapshot.child("carteServer").getValue());
+                Log.d("TAG5", "c1client: " + carteClient[0]);
+                Log.d("TAG5", "c2client: " + carteClient[1]);
+                Log.d("TAG5", "c3client: " + carteClient[2]);
+                Log.d("TAG5", "carteCentrali: " + snapshot.child("carteCentrali").getValue());
+
+                ivC1Client.setImageResource(Integer.parseInt(carteClient[0]));
+                ivC2Client.setImageResource(Integer.parseInt(carteClient[1]));
+                ivC3Client.setImageResource(Integer.parseInt(carteClient[2]));
+                for(int i=0;i<4;i++){//for (String c : carteCentrali) {
+                    if(i%2==0){
+                        carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
+                        adapterSopra.notifyItemInserted(carteSopra.size()-1);
+                    }else{
+                        carteSotto.add(mazzo.getCartaById(carteCentrali[i]));
+                        adapterSotto.notifyItemInserted(carteSotto.size()-1);
                     }
                 }
+                adapterSopra.notifyDataSetChanged();
+                adapterSotto.notifyDataSetChanged();
             }
 
             @Override
