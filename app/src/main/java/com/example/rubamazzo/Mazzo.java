@@ -5,9 +5,14 @@ import java.util.Random;
 
 public class Mazzo extends ArrayList<Carta> {
 
+    private static Mazzo istance;
     private static Random random = new Random();
 
-    public Mazzo(){
+    private Mazzo(){
+        aggiornaCarte();
+    }
+
+    private void aggiornaCarte(){
 
         // carico tutte le carte
         add(new Carta("b1",R.drawable.b1,1));
@@ -51,24 +56,35 @@ public class Mazzo extends ArrayList<Carta> {
         add(new Carta("s9",R.drawable.s9,9));
         add(new Carta("s10",R.drawable.s10,10));
     }
+
+    public static Mazzo getIstance(){
+        if(istance==null)
+            istance = new Mazzo();
+        return istance;
+    }
+
     //metodo per estrarre casualemente una carta
     public Carta estraiCarta(){
         Carta car;
         do{
-            car = this.get(random.nextInt(40));
+            car = istance.get(random.nextInt(40));
         }while(car.isEstratta());
         car.setEstrazione();
         return car;
     }
 
-    public Carta getCardById(String id){//public Carta getCarta(char seme, int valore){
-        for(int i=0;i<this.size();i++){
-            Carta carta = this.get(i);
-            if(carta.getId().equals(id))//if(carta.getSeme().equals(seme))&&(carta.getValore()==valore)
+    public Carta getCartaById(String id){//public Carta getCarta(char seme, int valore){
+        for(int i=0;i<istance.size();i++){
+            Carta carta = istance.get(i);
+            if(carta.getId().equals(id))
                 return carta;
         }
         return null;
     }
 
-    //Creare un metodo che mi dice quando il mazzo è vuoto isEmpty(), perchè quando non ci sono più carte da pescare.. finisce la partita
+    //metodo per ripristinare il mazzo
+    public void ripristinaMazzo(){
+        istance.clear();
+        aggiornaCarte();
+    }
 }

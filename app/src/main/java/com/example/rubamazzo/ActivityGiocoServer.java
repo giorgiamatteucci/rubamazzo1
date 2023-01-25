@@ -30,7 +30,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
     DatabaseReference dbRefPartita;
     Mazzo mazzo;
     int  c1client, c2client, c3client, c1server, c2server, c3server;
-    //String c1client, c2client, c3client, c1server, c2server, c3server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +66,21 @@ public class ActivityGiocoServer extends AppCompatActivity {
         idServer = getIntent().getStringExtra("idServer");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
 
-        mazzo = new Mazzo();
-        estraiDalMazzo3CarteGiocatori();
+        mazzo = Mazzo.getIstance();
+        ivC1Client.setImageResource(R.drawable.retro);
+        ivC2Client.setImageResource(R.drawable.retro);
+        ivC3Client.setImageResource(R.drawable.retro);
+
+        visualizzaCarte();
+        //estraiDalMazzo3CarteGiocatori();
         //setCarteCentrali();
         //FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/").child(idClient);//per indicare il turno del client...?
         //allora il server può giocare  //if(dbRefPartita.child(idServer)){         }
 
         ivC1Server.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { }
+            public void onClick(View v) { //estraiDalMazzo3CarteGiocatori(); visualizzaCarte(); //TEST FATTO
+            }
         });
         ivC2Server.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +93,39 @@ public class ActivityGiocoServer extends AppCompatActivity {
         ivMazzoServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { }
+        });
+        ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
+    }
+
+    private void visualizzaCarte(){
+        FirebaseDatabase.getInstance().getReference("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (idPartita.equals(snapshot.getKey())) {
+                        String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
+                        String[] carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
+                        ivC1Server.setImageResource(Integer.parseInt(carteServer[0]));
+                        ivC2Server.setImageResource(Integer.parseInt(carteServer[1]));
+                        ivC3Server.setImageResource(Integer.parseInt(carteServer[2]));
+                        for(int i=0;i<4;i++){//for (String c : carteCentrali) {
+                            if(i%2==0){
+                                carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
+                                adapterSopra.notifyItemInserted(carteSopra.size()-1);
+                            }else{
+                                carteSotto.add(mazzo.getCartaById(carteCentrali[i]));
+                                adapterSotto.notifyItemInserted(carteSotto.size()-1);
+                            }
+                        }
+                        adapterSopra.notifyDataSetChanged();
+                        adapterSotto.notifyDataSetChanged();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
@@ -109,31 +147,14 @@ public class ActivityGiocoServer extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-        ivC1Client.setImageResource(R.drawable.retro);
-        ivC2Client.setImageResource(R.drawable.retro);
-        ivC3Client.setImageResource(R.drawable.retro);
-        FirebaseDatabase.getInstance().getReference("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (idPartita.equals(snapshot.getKey())) {
-                        //String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
-                        //ivC1Server.setImageResource(Integer.parseInt(carteServer[0]));
-                        //ivC2Server.setImageResource(Integer.parseInt(carteServer[1]));
-                        //ivC3Server.setImageResource(Integer.parseInt(carteServer[2]));
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
     }
 
     private void setCarteCentrali(){
         for(int i=0;i<4;i++){
             Carta carta = mazzo.estraiCarta();
             FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/carteCentrali").child(String.valueOf(System.currentTimeMillis())).setValue(carta.getId());
+            //FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/carteCentrali").setValue(carta.getId() + " ");//tentativo perchè difficile riprendere il valore
             //SU FIREBASE IN CARTE CENTRALI VENGONO INSERITE PIU' DI 4 CARTE PER COLPA DI QUESTO METODO
             if(i%2==0){
                 carteSopra.add(carta);
