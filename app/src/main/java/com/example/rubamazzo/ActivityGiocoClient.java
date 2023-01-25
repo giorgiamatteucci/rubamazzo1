@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +33,9 @@ public class ActivityGiocoClient extends AppCompatActivity {
     DatabaseReference dbRefPartita;
     Mazzo mazzo = Mazzo.getIstance();
     String idPartita;
+    boolean mioTurno;
+    String[] carteClient,carteCentrali;
+    int nCarteMazzoClient, nCarteMazzoServer;
     //DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
 
     @Override
@@ -66,6 +70,61 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
         idPartita = getIntent().getStringExtra("idPartita");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
+
+        ImageView.OnClickListener onClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mioTurno){
+                    //TODO logica gioco
+                    Carta carta = mazzo.getCartaById(v.getId());
+
+                    boolean corrispondenza = false;
+                    if(mazzo.getCartaById(ivMazzoServer.getId()).getValore() == carta.getValore()){
+                        ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
+                        // TODO aggiornamento numero carte per mazzo
+                        ImageView imageView = (ImageView) v;
+                        imageView.setImageResource(R.drawable.seleziona_carta);
+                        corrispondenza = true;
+                        dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                        dbRefPartita.child("turno").setValue("server");
+                    }
+
+                    if(!corrispondenza) {
+                        for (Carta c : carteSopra) {
+                            if (carta.getValore() == c.getValore()) {
+                                carteSopra.remove(c);
+
+                                ImageView imageView = (ImageView) v;
+                                imageView.setImageResource(R.drawable.seleziona_carta);
+                                corrispondenza = true;
+                                adapterSopra.notifyDataSetChanged();
+                                dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                                dbRefPartita.child("turno").setValue("server");
+                                break;
+                            }
+                        }
+                    }
+
+                    if(!corrispondenza) {
+                        for (Carta c : carteSotto) {
+                            if (carta.getValore() == c.getValore()) {
+                                carteSotto.remove(c);
+                                ImageView imageView = (ImageView) v;
+                                imageView.setImageResource(R.drawable.seleziona_carta);
+                                corrispondenza = true;
+                                adapterSotto.notifyDataSetChanged();
+                                dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                                dbRefPartita.child("turno").setValue("server");
+                                break;
+                            }
+                        }
+                    }
+
+                }else{
+                    Toast.makeText(ActivityGiocoClient.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
 
         ivC1Client.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,5 +185,86 @@ public class ActivityGiocoClient extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {   }
         });
 
+    }
+
+    private String getUpdateCarteClient(String id){
+        String output ="";
+        for(int i=0;i<carteClient.length;i++){
+            if(!carteClient[i].equals(id)){
+                output+= carteClient[i]+" ";
+            }else{
+                output+= "VUOTO ";
+            }
+        }
+        return output;
+    }
+
+    private void scaricaStatoPartita(){
+
+        dbRefPartita.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
+                carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
+                carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
+                String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
+
+                ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[0]).getIdImmagine());
+                ivC2Client.setImageResource(carteClient[1].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[1]).getIdImmagine());
+                ivC3Client.setImageResource(carteClient[2].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[2]).getIdImmagine());
+
+                ivC1Server.setImageResource(carteServer[0].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
+                ivC2Server.setImageResource(carteServer[1].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
+                ivC3Server.setImageResource(carteServer[2].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
+
+                Log.d("TAG-REFRESH"," step 1 ok");
+
+                carteSotto.clear();
+                carteSopra.clear();
+
+                Log.d("TAG-REFRESH"," step 2 ok");
+
+                for(int i=0;i<carteCentrali.length;i++) {
+                    if(i%2==0){
+                        carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
+                        adapterSopra.notifyItemInserted(carteSopra.size()-1);
+                    }else{
+                        carteSotto.add(mazzo.getCartaById(carteCentrali[i]));
+                        adapterSotto.notifyItemInserted(carteSotto.size()-1);
+                    }
+                }
+
+                Log.d("TAG-REFRESH"," step 3 ok");
+
+                nCarteMazzoClient = snapshot.child("nCarteMazzoC").getValue(Integer.class);
+                nCarteMazzoServer = snapshot.child("nCarteMazzoS").getValue(Integer.class);
+
+                String idCartaMazzoClient = snapshot.child("cartaMazzoC").getValue(String.class);
+                if(!idCartaMazzoClient.isEmpty()){
+                    ivMazzoClient.setImageResource(mazzo.getCartaById(idCartaMazzoClient).getIdImmagine());
+                }else{
+                    ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
+                }
+
+                String idCartaMazzoServer = snapshot.child("cartaMazzoS").getValue(String.class);
+                if(!idCartaMazzoServer.isEmpty()){
+                    ivMazzoServer.setImageResource(mazzo.getCartaById(idCartaMazzoServer).getIdImmagine());
+                }else{
+                    ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
+                }
+
+                Log.d("TAG-REFRESH"," step 4 ok");
+
+                mioTurno = snapshot.child("turno").getValue().equals("client");
+
+                adapterSopra.notifyDataSetChanged();
+                adapterSotto.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
     }
 }

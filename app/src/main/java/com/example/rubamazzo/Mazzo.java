@@ -73,6 +73,7 @@ public class Mazzo extends ArrayList<Carta> {
         return car;
     }
 
+    // id dell'oggetto carta (es. b3)
     public Carta getCartaById(String id){//public Carta getCarta(char seme, int valore){
         for(int i=0;i<istance.size();i++){
             Carta carta = istance.get(i);
@@ -81,6 +82,17 @@ public class Mazzo extends ArrayList<Carta> {
         }
         return null;
     }
+
+    // 2569854785 -> id della risorsa (immagine) collegata ad una carta
+    public Carta getCartaById(int id){//public Carta getCarta(char seme, int valore){
+        for(int i=0;i<istance.size();i++){
+            Carta carta = istance.get(i);
+            if(carta.getIdImmagine() == id)
+                return carta;
+        }
+        return null;
+    }
+
 
     //metodo per ripristinare il mazzo
     public void ripristinaMazzo(){

@@ -31,7 +31,6 @@ public class AttesaActivity extends AppCompatActivity {
 
     Partita partita;
     Mazzo mazzo = Mazzo.getIstance();
-    int  c1client, c2client, c3client, c1server, c2server, c3server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,18 +94,24 @@ public class AttesaActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
                             if (!partita.getIdClient().isEmpty()) {
-
-                                c1client = mazzo.estraiCarta().getIdImmagine();//c1client = mazzo.estraiCarta().getId();
-                                c2client = mazzo.estraiCarta().getIdImmagine();//c2client = mazzo.estraiCarta().getId();
-                                c3client = mazzo.estraiCarta().getIdImmagine();//c3client = mazzo.estraiCarta().getId();
+                                String  c1client, c2client, c3client, c1server, c2server, c3server;
+                                c1client = mazzo.estraiCarta().getId();
+                                c2client = mazzo.estraiCarta().getId();
+                                c3client = mazzo.estraiCarta().getId();
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/carteClient").setValue(c1client + " " + c2client+ " " +c3client);
 
-                                c1server = mazzo.estraiCarta().getIdImmagine();//c1server = mazzo.estraiCarta().getId();
-                                c2server = mazzo.estraiCarta().getIdImmagine();//c2server = mazzo.estraiCarta().getId();
-                                c3server = mazzo.estraiCarta().getIdImmagine();//c3server = mazzo.estraiCarta().getId();
+                                c1server = mazzo.estraiCarta().getId();
+                                c2server = mazzo.estraiCarta().getId();
+                                c3server = mazzo.estraiCarta().getId();
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/carteServer").setValue(c1server + " " +c2server + " " + c3server);
 
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/carteCentrali").setValue(mazzo.estraiCarta().getId() + " " +mazzo.estraiCarta().getId() + " " + mazzo.estraiCarta().getId()+ " " + mazzo.estraiCarta().getId());
+
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/turno").setValue("client");
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/cartaMazzoC").setValue("");
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/nCarteMazzoC").setValue(0);
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/cartaMazzoS").setValue("");
+                                FirebaseDatabase.getInstance().getReference("Partita/" + idPartita +"/mCarteMazzoS").setValue(0);
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
