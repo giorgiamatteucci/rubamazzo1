@@ -93,10 +93,8 @@ public class Mazzo extends ArrayList<Carta> {
         return null;
     }
 
-
-    //metodo per ripristinare il mazzo
-    public void ripristinaMazzo(){
-        istance.clear();
-        aggiornaCarte();
+    public boolean isEmpty(){
+        // TODO controllare l'istanza del mazzo e verificare che tutte le carte siano state estratte
+        return true;
     }
 }

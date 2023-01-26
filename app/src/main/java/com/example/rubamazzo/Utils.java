@@ -9,7 +9,7 @@ public class Utils {
     }
 
     public static Partita getPartitaFromHashMap(HashMap hashmap){
-        return new Partita((String) hashmap.get("idClient"), (String) hashmap.get("idServer"),(String) hashmap.get("carteClient"), (String) hashmap.get("carteServer"));
+        return new Partita((String) hashmap.get("idClient"), (String) hashmap.get("idServer"));
     }
 
 }

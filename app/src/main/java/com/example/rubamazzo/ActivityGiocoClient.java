@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ActivityGiocoClient extends AppCompatActivity {
@@ -36,7 +37,8 @@ public class ActivityGiocoClient extends AppCompatActivity {
     boolean mioTurno;
     String[] carteClient,carteCentrali;
     int nCarteMazzoClient, nCarteMazzoServer;
-    //DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/");
+
+    Map hashmap = new HashMap<Integer,String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,10 @@ public class ActivityGiocoClient extends AppCompatActivity {
             public void onClick(View v) {
                 if(mioTurno){
                     //TODO logica gioco
-                    Carta carta = mazzo.getCartaById(v.getId());
+                    Log.d("TAG-REFRESH","v.getId(): " + String.valueOf(v.getId()));
+                    Log.d("TAG-REFRESH","hashmap.get(v.getId()): " + hashmap.get(v.getId()));
+                    Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
+                    Log.d("TAG-REFRESH","carta: " + carta);
 
                     boolean corrispondenza = false;
                     if(mazzo.getCartaById(ivMazzoServer.getId()).getValore() == carta.getValore()){
@@ -88,12 +93,16 @@ public class ActivityGiocoClient extends AppCompatActivity {
                         dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
                         dbRefPartita.child("turno").setValue("server");
                     }
-
+                    Log.d("TAG-REFRESH","prima del for");
                     if(!corrispondenza) {
                         for (Carta c : carteSopra) {
+                            Log.d("TAG-REFRESH","c: "+ c.toString());
+                            Log.d("TAG-REFRESH","c.getValore(): "+ c.getValore());
+                            Log.d("TAG-REFRESH","ciclo dentro carteSopra");
                             if (carta.getValore() == c.getValore()) {
+                                Log.d("TAG-REFRESH","la carta selezionata è sopra");
+                                dbRefPartita.child("carteCentrali").setValue(getUpdateCarteCentrali(c.getId()));
                                 carteSopra.remove(c);
-
                                 ImageView imageView = (ImageView) v;
                                 imageView.setImageResource(R.drawable.seleziona_carta);
                                 corrispondenza = true;
@@ -104,10 +113,13 @@ public class ActivityGiocoClient extends AppCompatActivity {
                             }
                         }
                     }
+                    Log.d("TAG-REFRESH","ho finito di ciclare carteSopra");
 
                     if(!corrispondenza) {
                         for (Carta c : carteSotto) {
                             if (carta.getValore() == c.getValore()) {
+                                Log.d("TAG-REFRESH","la carta selezionata è sotto");
+                                dbRefPartita.child("carteCentrali").setValue(getUpdateCarteCentrali(c.getId()));
                                 carteSotto.remove(c);
                                 ImageView imageView = (ImageView) v;
                                 imageView.setImageResource(R.drawable.seleziona_carta);
@@ -118,6 +130,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
                                 break;
                             }
                         }
+                    }
+
+                    if(!corrispondenza) {
+                        Log.d("TAG-REFRESH","la carta selezionata la carta selezionata non è ne sotto ne sopra");
+                        //TODO da aggiungere sia alle carte centrali sia nel db che graficamente
+                        //dbRefPartita.child("carteCentrali").setValue();
                     }
 
                 }else{
@@ -132,7 +150,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
         ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
         /*
          * if() c'è una carta all'interno della rw che ha lo stesso valore di quella selezionata
-         * togliere la carta selezionata tra le sue e metterla tra quelle del mazzo (eliminare anche la carta della rw)
+         * TODO togliere la carta selezionata tra le sue e metterla tra quelle del mazzo (eliminare anche la carta della rw)
          * altrimenti toast
          * */
 
@@ -192,6 +210,18 @@ public class ActivityGiocoClient extends AppCompatActivity {
         return output;
     }
 
+    private String getUpdateCarteCentrali(String id){
+        String output ="";
+        for(int i=0;i<carteCentrali.length;i++){
+            if(!carteCentrali[i].equals(id)){
+                output+= carteCentrali[i]+" ";
+            }else{
+                output+= "";
+            }
+        }
+        return output;
+    }
+
     private void scaricaStatoPartita(){
 
         dbRefPartita.addValueEventListener(new ValueEventListener() {
@@ -206,7 +236,11 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[0]).getIdImmagine());
                 ivC2Client.setImageResource(carteClient[1].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[1]).getIdImmagine());
                 ivC3Client.setImageResource(carteClient[2].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[2]).getIdImmagine());
-
+                Log.d("TAG-REFRESH","hashmap iniziale: " + hashmap);
+                hashmap.put(ivC1Client.getId(),carteClient[0]);
+                hashmap.put(ivC2Client.getId(),carteClient[1]);
+                hashmap.put(ivC3Client.getId(),carteClient[2]);
+                Log.d("TAG-REFRESH","hashmap finale: " + hashmap);
                 ivC1Server.setImageResource(carteServer[0].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
                 ivC2Server.setImageResource(carteServer[1].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
                 ivC3Server.setImageResource(carteServer[2].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
