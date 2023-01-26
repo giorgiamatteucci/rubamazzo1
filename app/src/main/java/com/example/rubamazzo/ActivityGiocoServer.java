@@ -105,6 +105,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         boolean corrispondenza = false;
 
                         String idCartaMazzoClient = (String) hashmap.get(ivMazzoClient.getId());
+                        Log.d("ONCLICK","idCartaMazzoClient: "+idCartaMazzoClient);
                         if (!idCartaMazzoClient.equals("") && mazzo.getCartaById(idCartaMazzoClient).getValore() == carta.getValore()) {
                             corrispondenza = true;
                             dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
@@ -279,8 +280,12 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
                 mioTurno = snapshot.child("turno").getValue().equals("server");
 
+                Log.d("TAG-REFRESH"," step 5 ok");
+
                 adapterSopra.notifyDataSetChanged();
                 adapterSotto.notifyDataSetChanged();
+
+                Log.d("TAG-REFRESH"," step 6 ok");
 
             }
 

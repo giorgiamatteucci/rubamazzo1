@@ -76,6 +76,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
         ImageView.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("ONCLICK", "----------------------------------");
                 if(mioTurno){
                     //TODO logica gioco
                     Log.d("TAG-REFRESH","hashmap.get(v.getId()): " + hashmap.get(v.getId()));
@@ -84,6 +85,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
                     boolean corrispondenza = false;
                     String idCartaMazzoServer = (String) hashmap.get(ivMazzoServer.getId());
+                    Log.d("ONCLICK","idCartaMazzoServer: "+idCartaMazzoServer);
                     if (!idCartaMazzoServer.equals("") && mazzo.getCartaById(idCartaMazzoServer).getValore() == carta.getValore()) {
                         corrispondenza = true;
                         dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteClient,carta.getId()));
@@ -267,8 +269,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
                 mioTurno = snapshot.child("turno").getValue().equals("client");
 
+                Log.d("TAG-REFRESH"," step 5 ok");
+
                 adapterSopra.notifyDataSetChanged();
                 adapterSotto.notifyDataSetChanged();
+
+                Log.d("TAG-REFRESH"," step 6 ok");
 
             }
 
