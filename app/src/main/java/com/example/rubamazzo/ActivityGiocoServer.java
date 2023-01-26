@@ -122,11 +122,12 @@ public class ActivityGiocoServer extends AppCompatActivity {
                             for (Carta c : carteSopra) {
                                 if (carta.getValore() == c.getValore()) {
                                     Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
-                                    carteSopra.remove(c);
+                                    //carteSopra.remove(c);
                                    // ImageView imageView = (ImageView) v;
                                    // imageView.setImageResource(R.drawable.seleziona_carta);
                                     corrispondenza = true;
-                                    adapterSopra.notifyDataSetChanged();
+                                   // adapterSopra.notifyDataSetChanged();
+                                    dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                                     dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
                                     dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
                                     dbRefPartita.child("cartaMazzoS").setValue(c.getId());
@@ -140,11 +141,12 @@ public class ActivityGiocoServer extends AppCompatActivity {
                             for (Carta c : carteSotto) {
                                 if (carta.getValore() == c.getValore()) {
                                     Log.d("TAG-REFRESH", "la carta selezionata è nel rvSotto");
-                                    carteSotto.remove(c);
+                                  //  carteSotto.remove(c);
                                     // ImageView imageView = (ImageView) v;
                                     // imageView.setImageResource(R.drawable.seleziona_carta);
                                     corrispondenza = true;
-                                    adapterSotto.notifyDataSetChanged();
+                                    //adapterSotto.notifyDataSetChanged();
+                                    dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                                     dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
                                     dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
                                     dbRefPartita.child("cartaMazzoS").setValue(c.getId());
@@ -159,6 +161,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                             //ImageView imageView = (ImageView) v;
                            // imageView.setImageResource(R.drawable.seleziona_carta);
                             corrispondenza = true;
+
                             dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
                             dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                             dbRefPartita.child("turno").setValue("client");
@@ -173,7 +176,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                     //TODO Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
                     if(mazzo.isEmpty()){
                         //TODO controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
-                        Log.d("TAG-REFRESH", getVincitore());
+                        Log.d("VINCITORE", getVincitore());
                         Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
                         startActivity(i);
                         finish();
@@ -192,23 +195,16 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
     private String getVincitore(){
         String vincitore="";
-        dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                int nCarteMazzoS = snapshot.child("nCarteMazzoS").getValue(Long.class).intValue();
-                int nCarteMazzoC = snapshot.child("nCarteMazzoC").getValue(Long.class).intValue();
-                if(nCarteMazzoS > nCarteMazzoC){ 
-                    Log.d("TAG-REFRESH","il nCarteMazzoS è maggione del nCarteMazzoC di: " + (nCarteMazzoS-nCarteMazzoC));
-                    //vincitore = "server"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
-                } else {
-                    Log.d("TAG-REFRESH","il nCarteMazzoC è maggione del nCarteMazzoS di: " + (nCarteMazzoC-nCarteMazzoS));
-                    //vincitore = "client"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+        Log.d("VINCITORE","nCarteMazzoServer: " +nCarteMazzoServer);
+        Log.d("VINCITORE","nCarteMazzoClient: " +nCarteMazzoClient);
+        Log.d("VINCITORE","totale: " +(nCarteMazzoServer+nCarteMazzoClient));
+        if(nCarteMazzoServer > nCarteMazzoClient){
+            Log.d("VINCITORE","il nCarteMazzoS è maggione del nCarteMazzoC di: " + (nCarteMazzoServer-nCarteMazzoClient));
+            //vincitore = "server"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
+        } else {
+            Log.d("VINCITORE","il nCarteMazzoC è maggione del nCarteMazzoS di: " + (nCarteMazzoClient-nCarteMazzoServer));
+            //vincitore = "client"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
+        }
         return vincitore;
     }
 

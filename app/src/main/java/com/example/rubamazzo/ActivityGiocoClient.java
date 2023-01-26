@@ -102,11 +102,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
                         for (Carta c : carteSopra) {
                             if (carta.getValore() == c.getValore()) {
                                 Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
-                                carteSopra.remove(c);
+                                //carteSopra.remove(c);
                                 // ImageView imageView = (ImageView) v;
                                 // imageView.setImageResource(R.drawable.seleziona_carta);
                                 corrispondenza = true;
-                                adapterSopra.notifyDataSetChanged();
+                                //adapterSopra.notifyDataSetChanged();
+                                dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                                 dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
                                 dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient+2);
                                 dbRefPartita.child("cartaMazzoC").setValue(c.getId());
@@ -120,11 +121,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
                         for (Carta c : carteSotto) {
                             if (carta.getValore() == c.getValore()) {
                                 Log.d("TAG-REFRESH", "la carta selezionata è nel rvSottoa");
-                                carteSotto.remove(c);
+                                //carteSotto.remove(c);
                                 adapterSotto.notifyDataSetChanged();
                                 // ImageView imageView = (ImageView) v;
                                 // imageView.setImageResource(R.drawable.seleziona_carta);
                                 corrispondenza = true;
+                                dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                                 dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
                                 dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient+2);
                                 dbRefPartita.child("cartaMazzoC").setValue(c.getId());

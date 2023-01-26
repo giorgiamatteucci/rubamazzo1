@@ -1,5 +1,7 @@
 package com.example.rubamazzo;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 public class Utils {
@@ -12,7 +14,8 @@ public class Utils {
         return new Partita((String) hashmap.get("idClient"), (String) hashmap.get("idServer"));
     }
 
-    public static String addCarteCentrali(String [] carteCentrali, String id) {
+    public static String addCarteCentrali(String[] carteCentrali, String id) {
+        Log.d("carteCentrali input ",carteCentrali.toString());
         String output = "";
         for (int i = 0; i < carteCentrali.length; i++) {
             if (!carteCentrali[i].equals(id)) {
@@ -21,6 +24,7 @@ public class Utils {
                 output += id + " ";
             }
         }
+        Log.d("carteCentrali output ",output);
         return output;
     }
 
