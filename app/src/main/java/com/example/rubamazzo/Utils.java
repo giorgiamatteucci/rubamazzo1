@@ -12,4 +12,16 @@ public class Utils {
         return new Partita((String) hashmap.get("idClient"), (String) hashmap.get("idServer"));
     }
 
+    public static String addCarteCentrali(String [] carteCentrali, String id) {
+        String output = "";
+        for (int i = 0; i < carteCentrali.length; i++) {
+            if (!carteCentrali[i].equals(id)) {
+                output += carteCentrali[i] + " ";
+            } else {
+                output += id + " ";
+            }
+        }
+        return output;
+    }
+
 }

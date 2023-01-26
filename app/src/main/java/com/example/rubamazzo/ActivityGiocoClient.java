@@ -83,29 +83,33 @@ public class ActivityGiocoClient extends AppCompatActivity {
                     Log.d("TAG-REFRESH","carta: " + carta);
 
                     boolean corrispondenza = false;
-                    /*if(mazzo.getCartaById(ivMazzoServer.getImageAlpha()).getValore() == carta.getValore()){//TODO NullPointerException: Attempt to invoke virtual method 'int com.example.rubamazzo.Carta.getValore()' on a null object reference
-                        ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
-                        // TODO aggiornamento numero carte per mazzo
-                        ImageView imageView = (ImageView) v;
-                        imageView.setImageResource(R.drawable.seleziona_carta);
+                    String idCartaMazzoServer = (String) hashmap.get(ivMazzoServer.getId());
+                    if (!idCartaMazzoServer.equals("") && mazzo.getCartaById(idCartaMazzoServer).getValore() == carta.getValore()) {
+                        //ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
+                        //ImageView imageView = (ImageView) v;
+                        //imageView.setImageResource(R.drawable.seleziona_carta);
                         corrispondenza = true;
                         dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                        dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoServer+nCarteMazzoClient+1);
+                        nCarteMazzoServer=0;
+                        dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer);
+                        dbRefPartita.child("cartaMazzoS").setValue("");
+                        dbRefPartita.child("cartaMazzoC").setValue(idCartaMazzoServer);
                         dbRefPartita.child("turno").setValue("server");
-                    }*/
+                    }
 
                     if(!corrispondenza) {
                         for (Carta c : carteSopra) {
                             if (carta.getValore() == c.getValore()) {
-                                Log.d("TAG-REFRESH","la carta selezionata è nel rvSopra");
-                                dbRefPartita.child("cartaMazzoC").setValue(c.getId());
-                                //incrDi2NCarteMazzoC();
-                                dbRefPartita.child("carteCentrali").setValue(getUpdateCarteCentrali(c.getId()));
+                                Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
                                 carteSopra.remove(c);
-                                ImageView imageView = (ImageView) v;
-                                imageView.setImageResource(R.drawable.seleziona_carta);
+                                // ImageView imageView = (ImageView) v;
+                                // imageView.setImageResource(R.drawable.seleziona_carta);
                                 corrispondenza = true;
                                 adapterSopra.notifyDataSetChanged();
                                 dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                                dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient+2);
+                                dbRefPartita.child("cartaMazzoC").setValue(c.getId());
                                 dbRefPartita.child("turno").setValue("server");
                                 break;
                             }
@@ -115,16 +119,15 @@ public class ActivityGiocoClient extends AppCompatActivity {
                     if(!corrispondenza) {
                         for (Carta c : carteSotto) {
                             if (carta.getValore() == c.getValore()) {
-                                Log.d("TAG-REFRESH","la carta selezionata è nel rvSotto");
-                                dbRefPartita.child("cartaMazzoC").setValue(c.getId());
-                                //incrDi2NCarteMazzoC();
-                                dbRefPartita.child("carteCentrali").setValue(getUpdateCarteCentrali(c.getId()));//non funziona
-                                carteSotto.remove(c);//non funziona
-                                ImageView imageView = (ImageView) v;
-                                imageView.setImageResource(R.drawable.seleziona_carta);
-                                corrispondenza = true;
+                                Log.d("TAG-REFRESH", "la carta selezionata è nel rvSottoa");
+                                carteSotto.remove(c);
                                 adapterSotto.notifyDataSetChanged();
+                                // ImageView imageView = (ImageView) v;
+                                // imageView.setImageResource(R.drawable.seleziona_carta);
+                                corrispondenza = true;
                                 dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                                dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient+2);
+                                dbRefPartita.child("cartaMazzoC").setValue(c.getId());
                                 dbRefPartita.child("turno").setValue("server");
                                 break;
                             }
@@ -132,16 +135,13 @@ public class ActivityGiocoClient extends AppCompatActivity {
                     }
 
                     if(!corrispondenza) {
-                        Log.d("TAG-REFRESH","la carta selezionata la carta selezionata non è ne sotto ne sopra");
-                        ImageView imageView = (ImageView) v;
-                        imageView.setImageResource(R.drawable.seleziona_carta);
+                        Log.d("TAG-REFRESH", "la carta selezionata la carta selezionata non è ne sotto ne sopra");
+                        //ImageView imageView = (ImageView) v;
+                        // imageView.setImageResource(R.drawable.seleziona_carta);
                         corrispondenza = true;
-                        adapterSotto.notifyDataSetChanged();
                         dbRefPartita.child("carteClient").setValue(getUpdateCarteClient(carta.getId()));
+                        dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                         dbRefPartita.child("turno").setValue("server");
-
-                        //TODO da aggiungere sia alle carte centrali sia nel db che graficamente
-                        dbRefPartita.child("carteCentrali").setValue(addCarteCentrali(carta.getId()));
                     }
 
                 }else{
@@ -202,43 +202,6 @@ public class ActivityGiocoClient extends AppCompatActivity {
         return output;
     }
 
-    private String getUpdateCarteCentrali(String id){
-        String output ="";
-        for(int i=0;i<carteCentrali.length;i++){
-            if(!carteCentrali[i].equals(id)){
-                output+= carteCentrali[i]+" ";
-            }else{
-                output+= "";
-            }
-        }
-        return output;
-    }
-
-    private String addCarteCentrali(String id){
-        String output ="";
-        for(int i=0;i<carteCentrali.length;i++){
-            if(!carteCentrali[i].equals(id)){
-                output+= carteCentrali[i]+" ";
-            }else{
-                output+= id + " ";
-            }
-        }
-        return output;
-    }
-
-    private void incrDi2NCarteMazzoC(){ //forse lo deve fare il server
-        dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //int val = (int) snapshot.child("nCarteMazzoC").getValue(); //TODO ClassCastException: java.lang.Long cannot be cast to java.lang.Integer
-                //dbRefPartita.child("nCarteMazzoC").setValue(val+2);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {   }
-        });
-    }
-
     private void scaricaStatoPartita(){
 
         dbRefPartita.addValueEventListener(new ValueEventListener() {
@@ -297,6 +260,9 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 }else{
                     ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
                 }
+
+                hashmap.put(ivMazzoClient.getId(),idCartaMazzoClient);
+                hashmap.put(ivMazzoServer.getId(),idCartaMazzoServer);
 
                 Log.d("TAG-REFRESH"," step 4 ok");
 

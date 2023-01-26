@@ -98,34 +98,38 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onClick(View v) {
                 if(nMosse>0) {
                     if (mioTurno) {
-                        //TODO logica gioco
                         Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
 
                         boolean corrispondenza = false;
-                        /*if (mazzo.getCartaById(ivMazzoClient.getImageAlpha()).getValore() == carta.getValore()) { //TODO NullPointerException
-                            ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
-                            // TODO aggiornamento numero carte per mazzo
+
+                        String idCartaMazzoClient = (String) hashmap.get(ivMazzoClient.getId());
+                        if (!idCartaMazzoClient.equals("") && mazzo.getCartaById(idCartaMazzoClient).getValore() == carta.getValore()) {
+                           // ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
                             ImageView imageView = (ImageView) v;
                             imageView.setImageResource(R.drawable.seleziona_carta);
                             corrispondenza = true;
                             dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
-                            nMosse--;
+                            dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+nCarteMazzoClient+1);
+                            nCarteMazzoClient=0;
+                            dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient);
+                            dbRefPartita.child("cartaMazzoS").setValue(idCartaMazzoClient);
+                            dbRefPartita.child("cartaMazzoC").setValue("");
                             dbRefPartita.child("turno").setValue("client");
-                        }*/
+                            nMosse--;
+                        }
 
                         if (!corrispondenza) {
                             for (Carta c : carteSopra) {
                                 if (carta.getValore() == c.getValore()) {
                                     Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
-                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
-                                    //TODO update carte centrali e nCarteS
-                                    carteSopra.remove(c);//non funziona
-                                    ImageView imageView = (ImageView) v;
-                                    imageView.setImageResource(R.drawable.seleziona_carta);
+                                    carteSopra.remove(c);
+                                   // ImageView imageView = (ImageView) v;
+                                   // imageView.setImageResource(R.drawable.seleziona_carta);
                                     corrispondenza = true;
                                     adapterSopra.notifyDataSetChanged();
                                     dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
-                                    nMosse--;
+                                    dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
+                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
                                     dbRefPartita.child("turno").setValue("client");
                                     break;
                                 }
@@ -136,15 +140,14 @@ public class ActivityGiocoServer extends AppCompatActivity {
                             for (Carta c : carteSotto) {
                                 if (carta.getValore() == c.getValore()) {
                                     Log.d("TAG-REFRESH", "la carta selezionata è nel rvSotto");
-                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
-                                    //TODO update carte centrali e nCarteS
-                                    carteSotto.remove(c);//non funziona
-                                    ImageView imageView = (ImageView) v;
-                                    imageView.setImageResource(R.drawable.seleziona_carta);
+                                    carteSotto.remove(c);
+                                    // ImageView imageView = (ImageView) v;
+                                    // imageView.setImageResource(R.drawable.seleziona_carta);
                                     corrispondenza = true;
                                     adapterSotto.notifyDataSetChanged();
                                     dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
-                                    nMosse--;
+                                    dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
+                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
                                     dbRefPartita.child("turno").setValue("client");
                                     break;
                                 }
@@ -153,16 +156,13 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
                         if (!corrispondenza) {
                             Log.d("TAG-REFRESH", "la carta selezionata la carta selezionata non è ne sotto ne sopra");
-                            ImageView imageView = (ImageView) v;
-                            imageView.setImageResource(R.drawable.seleziona_carta);
+                            //ImageView imageView = (ImageView) v;
+                           // imageView.setImageResource(R.drawable.seleziona_carta);
                             corrispondenza = true;
                             dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
-                            nMosse--;
+                            dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
                             dbRefPartita.child("turno").setValue("client");
-
-                            //TODO da aggiungere sia alle carteCentrali sia nel db che graficamente
-                            dbRefPartita.child("carteCentrali").setValue(addCarteCentrali(carta.getId()));
-                            //dbRefPartita.child("carteCentrali").setValue();//adapterSotto.notifyDataSetChanged();
+                            nMosse--;
                         }
 
                     } else {//non capisco perchè non entra mai qui
@@ -195,9 +195,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
         dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                int nCarteMazzoS = (int) snapshot.child("nCarteMazzoS").getValue();
-                int nCarteMazzoC = (int) snapshot.child("nCarteMazzoC").getValue();
-                if(nCarteMazzoS > nCarteMazzoC){//TODO EXCEPTION
+                int nCarteMazzoS = snapshot.child("nCarteMazzoS").getValue(Long.class).intValue();
+                int nCarteMazzoC = snapshot.child("nCarteMazzoC").getValue(Long.class).intValue();
+                if(nCarteMazzoS > nCarteMazzoC){ 
                     Log.d("TAG-REFRESH","il nCarteMazzoS è maggione del nCarteMazzoC di: " + (nCarteMazzoS-nCarteMazzoC));
                     //vincitore = "server"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
                 } else {
@@ -210,18 +210,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {}
         });
         return vincitore;
-    }
-
-    private String addCarteCentrali(String id){
-        String output ="";
-        for(int i=0;i<carteCentrali.length;i++){
-            if(!carteCentrali[i].equals(id)){
-                output+= carteCentrali[i]+" ";
-            }else{
-                output+= id + " ";
-            }
-        }
-        return output;
     }
 
     private String getUpdateCarteServer(String id){
@@ -295,6 +283,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 }else{
                     ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
                 }
+
+                hashmap.put(ivMazzoClient.getId(),idCartaMazzoClient);
+                hashmap.put(ivMazzoServer.getId(),idCartaMazzoServer);
 
                 Log.d("TAG-REFRESH"," step 4 ok");
 

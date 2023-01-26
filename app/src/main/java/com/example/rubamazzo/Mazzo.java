@@ -7,12 +7,14 @@ public class Mazzo extends ArrayList<Carta> {
 
     private static Mazzo istance;
     private static Random random = new Random();
+    private static int countEstratte;
 
     private Mazzo(){
         aggiornaCarte();
     }
 
     private void aggiornaCarte(){
+        countEstratte=0;
 
         // carico tutte le carte
         add(new Carta("b1",R.drawable.b1,1));
@@ -69,6 +71,7 @@ public class Mazzo extends ArrayList<Carta> {
         do{
             car = istance.get(random.nextInt(40));
         }while(car.isEstratta());
+        countEstratte++;
         car.setEstrazione();
         return car;
     }
@@ -94,18 +97,6 @@ public class Mazzo extends ArrayList<Carta> {
     }
 
     public boolean isEmpty(){
-        // TODO DA VERIFICARE
-        //  controllare l'istanza del mazzo e verificare che tutte le carte siano state estratte
-        int countEstratte=0;
-        for(int i=0;i<istance.size();i++){
-            Carta carta = istance.get(i);
-            if(carta.isEstratta())
-                countEstratte++;
-        }
-        if(countEstratte==istance.size()){
-            return true;
-        }else{
-            return false;
-        }
+        return countEstratte==istance.size();
     }
 }
