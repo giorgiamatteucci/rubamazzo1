@@ -125,6 +125,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                                     //carteSopra.remove(c);
                                    // ImageView imageView = (ImageView) v;
                                    // imageView.setImageResource(R.drawable.seleziona_carta);
+                                    nMosse--;
                                     corrispondenza = true;
                                    // adapterSopra.notifyDataSetChanged();
                                     dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,carta.getId()));
@@ -144,6 +145,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                                   //  carteSotto.remove(c);
                                     // ImageView imageView = (ImageView) v;
                                     // imageView.setImageResource(R.drawable.seleziona_carta);
+                                    nMosse--;
                                     corrispondenza = true;
                                     //adapterSotto.notifyDataSetChanged();
                                     dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,carta.getId()));

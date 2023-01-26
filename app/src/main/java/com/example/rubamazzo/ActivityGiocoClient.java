@@ -105,7 +105,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
                                 corrispondenza = true;
                                 //adapterSopra.notifyDataSetChanged();
                                 dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,carta.getId()));
-                                dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteClient,carta.getId()));
+                                dbRefPartita.child("carteClient").setValue(Utils.removeCartaGiocatore(carteClient,carta.getId()));
                                 dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient+2);
                                 dbRefPartita.child("cartaMazzoC").setValue(c.getId());
                                 dbRefPartita.child("turno").setValue("server");
@@ -124,7 +124,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
                                 // imageView.setImageResource(R.drawable.seleziona_carta);
                                 corrispondenza = true;
                                 dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,carta.getId()));
-                                dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteClient,carta.getId()));
+                                dbRefPartita.child("carteClient").setValue(Utils.removeCartaGiocatore(carteClient,carta.getId()));
                                 dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient+2);
                                 dbRefPartita.child("cartaMazzoC").setValue(c.getId());
                                 dbRefPartita.child("turno").setValue("server");
