@@ -38,7 +38,6 @@ public class MenuActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
 
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()){
-                    Log.d("TAG01",dataSnapshot.toString());
                     Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) dataSnapshot.getValue());
                     if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                         tvUser.setText(giocatore.getUsername());
@@ -46,9 +45,7 @@ public class MenuActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onCancelled(DatabaseError error) {
-                Log.d("TAG", "Failed to read value.", error.toException());
-            }
+            public void onCancelled(DatabaseError error) { }
         });
         btnRegole = findViewById(R.id.btnRegole);
         btnGioca = findViewById(R.id.btnGioca);

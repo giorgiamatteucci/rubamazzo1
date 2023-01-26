@@ -49,8 +49,6 @@ public class ActivityClassifica extends AppCompatActivity {
         myUsername = findViewById(R.id.tvMyUser);
         getGiocatori();
 
-        provaPerComunicazione();
-
         btnIndietro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,46 +65,13 @@ public class ActivityClassifica extends AppCompatActivity {
 
     }
 
-    private void provaPerComunicazione() {
-
-        /*
-                S.E.
-                in questa prova ho verificato che avendo il codice alfa numerico con il quale firebase identifica
-                gli elementi è possibili recuperarli univocamente senza dover iterare si tutti i dati
-
-                quindi
-
-                nella collezione di partite io non ridonderei tutti i dati del giocatore ma solo questa chiave univoca
-                (non capisco l'utilità del macrp contenitore connessioni)
-
-                Log ottenuti dall'esecuzione di questo metodo
-                2023-01-20 22:13:32.466 17222-17222/com.example.rubamazzo D/TAG01: miracolooooooooo
-                2023-01-20 22:13:32.466 17222-17222/com.example.rubamazzo D/TAG01: DataSnapshot { key = 1ZvMssdfWZdqNwOVAGiIpGkXZ272, value = {password=giorgia, npartite=0, nvittorie=0, email=giorgia@gmail.com, username=gioMatt} }
-         */
-
-        String idPlayer ="1ZvMssdfWZdqNwOVAGiIpGkXZ272";
-        FirebaseDatabase.getInstance().getReference("Giocatore/"+idPlayer).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Log.d("TAG01","miracolooooooooo");
-                Log.d("TAG01",snapshot.toString());
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
-    }
-
     private void getGiocatori(){
            FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     for(DataSnapshot dataSnapshot :snapshot.getChildren()){
-                        //Log.d("TAG01"," 1 - "+ dataSnapshot.getValue().toString());
                         HashMap hasmap = (HashMap) dataSnapshot.getValue();
-                        //Log.d("TAG01", " 2 - "+hasmap.toString());
                         Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
-                        //Log.d("TAG01"," 3 - "+ giocatore.toString());
                         giocatori.add(giocatore);
                     }
                     rigaAdapter.notifyDataSetChanged();

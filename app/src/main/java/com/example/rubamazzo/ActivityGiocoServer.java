@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActivityGiocoServer extends AppCompatActivity {
 
@@ -32,8 +36,10 @@ public class ActivityGiocoServer extends AppCompatActivity {
     int nCarteMazzoClient, nCarteMazzoServer;
     boolean mioTurno;
     int nMosse;
-    //boolean fineManche;
-    //int  c1client, c2client, c3client, c1server, c2server, c3server;
+    String[] carteServer,carteCentrali;
+    //int nCarteMazzoClient, nCarteMazzoServer;
+
+    Map hashmap = new HashMap<Integer,String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,31 +92,148 @@ public class ActivityGiocoServer extends AppCompatActivity {
         //FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/").child(idClient);//per indicare il turno del client...?
         //allora il server può giocare  //if(dbRefPartita.child(idServer)){         }
 
-        ivC1Server.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
-        ivC2Server.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
-        ivC3Server.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { }
-        });
         ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
-        /*
-        su Firebase aggiungere il campo Turno che sarà valorizzato 'client' oppure 'server'
-        e in base al turno disabilitare gli onClick.
+        ImageView.OnClickListener onClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(nMosse>0) {
+                    if (mioTurno) {
+                        //TODO logica gioco
+                        Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
 
-         * if() c'è una carta all'interno della rw che ha lo stesso valore di quella selezionata
-         * (fare il controllo anche sul mazzo dell'avversario, salvare il numero di carte che ha in una varibile da creare)
-         * togliere la carta selezionata tra le sue e metterla tra quelle del mazzo (eliminare anche la carta della rw)
-         * altrimenti toast
-         *
-         * LA PARTITA FINISCE QUANDO SONO FINITE LE CARTE DEL MAZZO (creare il metodo isEmpty() nella classe Mazzo)
-         * VINCE CHI HA PIU' CARTE NEL MAZZO
-         * */
+                        boolean corrispondenza = false;
+                        /*if (mazzo.getCartaById(ivMazzoClient.getImageAlpha()).getValore() == carta.getValore()) { //TODO NullPointerException
+                            ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
+                            // TODO aggiornamento numero carte per mazzo
+                            ImageView imageView = (ImageView) v;
+                            imageView.setImageResource(R.drawable.seleziona_carta);
+                            corrispondenza = true;
+                            dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
+                            nMosse--;
+                            dbRefPartita.child("turno").setValue("client");
+                        }*/
+
+                        if (!corrispondenza) {
+                            for (Carta c : carteSopra) {
+                                if (carta.getValore() == c.getValore()) {
+                                    Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
+                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
+                                    //TODO update carte centrali e nCarteS
+                                    carteSopra.remove(c);//non funziona
+                                    ImageView imageView = (ImageView) v;
+                                    imageView.setImageResource(R.drawable.seleziona_carta);
+                                    corrispondenza = true;
+                                    adapterSopra.notifyDataSetChanged();
+                                    dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
+                                    nMosse--;
+                                    dbRefPartita.child("turno").setValue("client");
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!corrispondenza) {
+                            for (Carta c : carteSotto) {
+                                if (carta.getValore() == c.getValore()) {
+                                    Log.d("TAG-REFRESH", "la carta selezionata è nel rvSotto");
+                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
+                                    //TODO update carte centrali e nCarteS
+                                    carteSotto.remove(c);//non funziona
+                                    ImageView imageView = (ImageView) v;
+                                    imageView.setImageResource(R.drawable.seleziona_carta);
+                                    corrispondenza = true;
+                                    adapterSotto.notifyDataSetChanged();
+                                    dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
+                                    nMosse--;
+                                    dbRefPartita.child("turno").setValue("client");
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!corrispondenza) {
+                            Log.d("TAG-REFRESH", "la carta selezionata la carta selezionata non è ne sotto ne sopra");
+                            ImageView imageView = (ImageView) v;
+                            imageView.setImageResource(R.drawable.seleziona_carta);
+                            corrispondenza = true;
+                            dbRefPartita.child("carteServer").setValue(getUpdateCarteServer(carta.getId()));
+                            nMosse--;
+                            dbRefPartita.child("turno").setValue("client");
+
+                            //TODO da aggiungere sia alle carteCentrali sia nel db che graficamente
+                            dbRefPartita.child("carteCentrali").setValue(addCarteCentrali(carta.getId()));
+                            //dbRefPartita.child("carteCentrali").setValue();//adapterSotto.notifyDataSetChanged();
+                        }
+
+                    } else {//non capisco perchè non entra mai qui
+                        Log.d("TAG-REFRESH", "server aspetta il tuo turno");
+                        Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
+                    }
+                } else {Log.d("TAG-REFRESH", "il server ha finito le carte");
+                    //TODO Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
+                    if(mazzo.isEmpty()){
+                        //TODO controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
+                        Log.d("TAG-REFRESH", getVincitore());
+                        Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        estraiDalMazzo3CarteGiocatori();
+                        nMosse=3;
+                    }
+                }
+            }
+        };
+
+        ivC1Server.setOnClickListener(onClick);
+        ivC2Server.setOnClickListener(onClick);
+        ivC3Server.setOnClickListener(onClick);
+    }
+
+    private String getVincitore(){
+        String vincitore="";
+        dbRefPartita.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                int nCarteMazzoS = (int) snapshot.child("nCarteMazzoS").getValue();
+                int nCarteMazzoC = (int) snapshot.child("nCarteMazzoC").getValue();
+                if(nCarteMazzoS > nCarteMazzoC){//TODO EXCEPTION
+                    Log.d("TAG-REFRESH","il nCarteMazzoS è maggione del nCarteMazzoC di: " + (nCarteMazzoS-nCarteMazzoC));
+                    //vincitore = "server"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
+                } else {
+                    Log.d("TAG-REFRESH","il nCarteMazzoC è maggione del nCarteMazzoS di: " + (nCarteMazzoC-nCarteMazzoS));
+                    //vincitore = "client"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+        return vincitore;
+    }
+
+    private String addCarteCentrali(String id){
+        String output ="";
+        for(int i=0;i<carteCentrali.length;i++){
+            if(!carteCentrali[i].equals(id)){
+                output+= carteCentrali[i]+" ";
+            }else{
+                output+= id + " ";
+            }
+        }
+        return output;
+    }
+
+    private String getUpdateCarteServer(String id){
+        String output ="";
+        for(int i=0;i<carteServer.length;i++){
+            if(!carteServer[i].equals(id)){
+                output+= carteServer[i]+" ";
+            }else{
+                output+= "VUOTO ";
+            }
+        }
+        return output;
     }
 
     private void aggiornaStatoPartita(){
@@ -120,8 +243,8 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
-                String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
-                String[] carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
+                carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
+                carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
                 String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
 
                 ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
@@ -131,6 +254,11 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 ivC1Server.setImageResource(carteServer[0].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteServer[0]).getIdImmagine());
                 ivC2Server.setImageResource(carteServer[1].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteServer[1]).getIdImmagine());
                 ivC3Server.setImageResource(carteServer[2].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteServer[2]).getIdImmagine());
+                Log.d("TAG-REFRESH","hashmap iniziale: " + hashmap);
+                hashmap.put(ivC1Server.getId(),carteServer[0]);
+                hashmap.put(ivC2Server.getId(),carteServer[1]);
+                hashmap.put(ivC3Server.getId(),carteServer[2]);
+                Log.d("TAG-REFRESH","hashmap finale: " + hashmap);
 
                 Log.d("TAG-REFRESH"," step 1 ok");
 

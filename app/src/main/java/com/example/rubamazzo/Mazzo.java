@@ -94,7 +94,18 @@ public class Mazzo extends ArrayList<Carta> {
     }
 
     public boolean isEmpty(){
-        // TODO controllare l'istanza del mazzo e verificare che tutte le carte siano state estratte
-        return true;
+        // TODO DA VERIFICARE
+        //  controllare l'istanza del mazzo e verificare che tutte le carte siano state estratte
+        int countEstratte=0;
+        for(int i=0;i<istance.size();i++){
+            Carta carta = istance.get(i);
+            if(carta.isEstratta())
+                countEstratte++;
+        }
+        if(countEstratte==istance.size()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
