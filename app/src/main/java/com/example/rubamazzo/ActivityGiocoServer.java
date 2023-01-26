@@ -201,18 +201,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
         return vincitore;
     }
 
-    private String getUpdateCarteServer(String id){
-        String output ="";
-        for(int i=0;i<carteServer.length;i++){
-            if(!carteServer[i].equals(id)){
-                output+= carteServer[i]+" ";
-            }else{
-                output+= "VUOTO ";
-            }
-        }
-        return output;
-    }
-
     private void aggiornaStatoPartita(){
 
         dbRefPartita.addValueEventListener(new ValueEventListener() {
@@ -220,9 +208,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
-                carteServer = String.valueOf(snapshot.child("carteServer").getValue()).split(" ");
-                carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue()).split(" ");
-                String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue()).split(" ");
+                carteServer = String.valueOf(snapshot.child("carteServer").getValue(String.class)).split(" ");
+                carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue(String.class)).split(" ");
+                String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
 
                 ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
                 ivC2Client.setImageResource(carteClient[1].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
@@ -245,6 +233,8 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 Log.d("TAG-REFRESH"," step 2 ok");
 
                 for(int i=0;i<carteCentrali.length;i++) {
+                    if(carteCentrali[i].equals(""))
+                        break;
                     if(i%2==0){
                         carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
                         adapterSopra.notifyItemInserted(carteSopra.size()-1);

@@ -89,9 +89,13 @@ public class MenuActivity extends AppCompatActivity {
         btnClassifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
+
+                String[] carteCentrali = "1".split(" ");
+                Log.d("fanculo montori",""+(carteCentrali.length>0));
+                Log.d("fanculo montori",""+carteCentrali.length);
+                /*Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
                 startActivity(i);
-                finish();
+                finish();*/
             }
         });
 
