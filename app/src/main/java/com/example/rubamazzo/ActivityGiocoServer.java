@@ -128,7 +128,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                                     nMosse--;
                                     corrispondenza = true;
                                    // adapterSopra.notifyDataSetChanged();
-                                    dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,carta.getId()));
+                                    dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
                                     dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
                                     dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
                                     dbRefPartita.child("cartaMazzoS").setValue(c.getId());
@@ -148,7 +148,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                                     nMosse--;
                                     corrispondenza = true;
                                     //adapterSotto.notifyDataSetChanged();
-                                    dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,carta.getId()));
+                                    dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
                                     dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
                                     dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
                                     dbRefPartita.child("cartaMazzoS").setValue(c.getId());
@@ -174,7 +174,8 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         Log.d("TAG-REFRESH", "server aspetta il tuo turno");
                         Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
                     }
-                } else {Log.d("TAG-REFRESH", "il server ha finito le carte");
+                } else {
+                    Log.d("TAG-REFRESH", " ");
                     //TODO Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
                     if(mazzo.isEmpty()){
                         //TODO controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
