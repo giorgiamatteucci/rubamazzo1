@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,13 +32,12 @@ public class ActivityGiocoServer extends AppCompatActivity {
     ArrayList<Carta> carteSotto, carteSopra;
 
     String idPartita, idClient, idServer;
-    DatabaseReference dbRefPartita;
+    DatabaseReference dbRefPartita, dbRefGiocatore;
     Mazzo mazzo;
     int nCarteMazzoClient, nCarteMazzoServer;
     boolean mioTurno;
     int nMosse;
     String[] carteServer,carteCentrali;
-    //int nCarteMazzoClient, nCarteMazzoServer;
 
     Map hashmap = new HashMap<Integer,String>();
 
@@ -75,6 +75,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
         idClient = getIntent().getStringExtra("idClient");
         idServer = getIntent().getStringExtra("idServer");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
+        dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         mazzo = Mazzo.getIstance();
         ivC1Client.setImageResource(R.drawable.retro);
@@ -138,13 +139,13 @@ public class ActivityGiocoServer extends AppCompatActivity {
                             for (Carta c : carteSotto) {
                                 if (carta.getValore() == c.getValore()) {
                                     Log.d("TAG-REFRESH", "la carta selezionata è nel rvSotto");
-                                    nMosse--;
                                     corrispondenza = true;
                                     dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
                                     dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
                                     dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
                                     dbRefPartita.child("cartaMazzoS").setValue(c.getId());
                                     dbRefPartita.child("turno").setValue("client");
+                                    nMosse--;
                                     break;
                                 }
                             }
@@ -159,16 +160,24 @@ public class ActivityGiocoServer extends AppCompatActivity {
                             nMosse--;
                         }
 
-                    } else {//non capisco perchè non entra mai qui
-                        Log.d("TAG-REFRESH", "server aspetta il tuo turno");
+                    } else {
                         Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.d("ONCLICK", " sono nell'else. mazzo.isEmpty(): "+mazzo.isEmpty());
-                    //TODO Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
+                    //Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
                     if(mazzo.isEmpty()){
-                        //TODO controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
-                        Log.d("VINCITORE", getVincitore());
+                        //controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
+                        Log.d("VINCITORE", Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer));
+                        String npartite = getIntent().getStringExtra("npartite");//TODO DA CONTROLLARE
+                        //if(getIntent().getStringExtra("npartite").equals("null")){    npartite = 0;   }
+                        if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
+                            dbRefGiocatore.child("nvittorie").setValue(getIntent().getStringExtra("nvittorie")+1);
+                            Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(ActivityGiocoServer.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
+                        }
+                        dbRefGiocatore.child("npartite").setValue(npartite+1);
                         Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
                         startActivity(i);
                         finish();
@@ -184,21 +193,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
         ivC1Server.setOnClickListener(onClick);
         ivC2Server.setOnClickListener(onClick);
         ivC3Server.setOnClickListener(onClick);
-    }
-
-    private String getVincitore(){
-        String vincitore="";
-        Log.d("VINCITORE","nCarteMazzoServer: " +nCarteMazzoServer);
-        Log.d("VINCITORE","nCarteMazzoClient: " +nCarteMazzoClient);
-        Log.d("VINCITORE","totale: " +(nCarteMazzoServer+nCarteMazzoClient));
-        if(nCarteMazzoServer > nCarteMazzoClient){
-            Log.d("VINCITORE","il nCarteMazzoS è maggione del nCarteMazzoC di: " + (nCarteMazzoServer-nCarteMazzoClient));
-            //vincitore = "server"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
-        } else {
-            Log.d("VINCITORE","il nCarteMazzoC è maggione del nCarteMazzoS di: " + (nCarteMazzoClient-nCarteMazzoServer));
-            //vincitore = "client"; //Variable 'vincitore' is accessed from within inner class, needs to be final or effectively final
-        }
-        return vincitore;
     }
 
     private void aggiornaStatoPartita(){

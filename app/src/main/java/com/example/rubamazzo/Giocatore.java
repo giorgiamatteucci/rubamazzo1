@@ -20,14 +20,6 @@ public class Giocatore {
     public int getNVittorie(){return nVittorie;}
     public int getNPartite(){return nPartite;}
 
-    public void setKey(String key){ this.key=key;}
-    public void setUsername(String username){ this.username=username;}
-    public void setEmail(String email){ this.email=email;}
-    public void setPassword(String password){ this.password=password;}
-
-    //Metodi per incrementare il numero delle vittorie e il numero di patite giocate
-    public void incNVittorie(){nVittorie++;}
-    public void incNPartite(){nPartite++;}
 
     public String toStringCustom(){
         return "email: "+this.email+" password: "+this.password+" username: "+this.username+" nPartite: "+this.nPartite+" nVittorie: "+this.nVittorie;

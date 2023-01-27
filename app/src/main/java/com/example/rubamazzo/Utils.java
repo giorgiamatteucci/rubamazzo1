@@ -15,30 +15,25 @@ public class Utils {
     }
 
     public static String addCarteCentrali(String[] carteCentrali, String id) {
-        Log.d("UTILS","addCarteCentrali input "+carteCentrali.toString());
         String output = "";
         for (int i = 0; i < carteCentrali.length; i++) {
             output += carteCentrali[i] + " ";
         }
         output += id;
-        Log.d("UTILS","addCarteCentrali output "+output);
         return output;
     }
 
     public static String removeCartaDalCentro(String[] carteCentrali, String id) {
-        Log.d("UTILS","removeCartaDalCentro input "+carteCentrali.toString());
         String output = "";
         for (int i = 0; i < carteCentrali.length; i++) {
             if (!carteCentrali[i].equals(id)) {
                 output += carteCentrali[i] + " ";
             }
         }
-        Log.d("UTILS","removeCartaDalCentro output "+output);
         return output;
     }
 
     public static String removeCartaGiocatore(String[] carteGiocatore, String id) {
-        Log.d("UTILS","carteGiocatore input "+carteGiocatore.toString());
         String output = "";
         for (int i = 0; i < carteGiocatore.length; i++) {
             if (!carteGiocatore[i].equals(id)) {
@@ -47,8 +42,17 @@ public class Utils {
                 output += "VUOTO ";
             }
         }
-        Log.d("UTILS","carteGiocatore output "+output);
         return output;
+    }
+
+    public static String getVincitore(int nCarteMazzoClient, int nCarteMazzoServer){
+        String vincitore="";
+        if(nCarteMazzoServer > nCarteMazzoClient){
+            vincitore = "server";
+        } else {
+            vincitore = "client";
+        }
+        return vincitore;
     }
 
 }

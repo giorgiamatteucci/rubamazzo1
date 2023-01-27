@@ -60,12 +60,14 @@ public class AttesaActivity extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             String idPartita = snapshot.getKey();
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
-                            //Log.d("TAG5", (String) snapshot.child("idServer").getValue());
+
                             if(partita.getIdClient().isEmpty() && !(id.equals(snapshot.child("idServer").getValue()))){
                                 FirebaseDatabase.getInstance().getReference("Partita/" + idPartita+"/idClient").setValue(id);
                                 Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
                                 intent.putExtra("idPartita", idPartita);
+                                intent.putExtra("npartite", getIntent().getStringExtra("npartite"));
+                                intent.putExtra("nvittorie", getIntent().getStringExtra("nvittorie"));
                                 startActivity(intent);
                                 finish();
                                 break;
@@ -85,7 +87,7 @@ public class AttesaActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String idPartita = String.valueOf(System.currentTimeMillis());
                     partita = new Partita("", id);
-                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);//non fa il comportamento atteso
+                    FirebaseDatabase.getInstance().getReference("Partita/" + idPartita).setValue(partita);
                     Toast.makeText(AttesaActivity.this, "Partita creata.", Toast.LENGTH_SHORT).show();
 
                     dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {
@@ -114,8 +116,10 @@ public class AttesaActivity extends AppCompatActivity {
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
-                                i.putExtra("idClient", partita.getIdClient());
-                                i.putExtra("idServer", partita.getIdServer());
+                                i.putExtra("idClient", partita.getIdClient());//DA ELIMINARE
+                                i.putExtra("idServer", partita.getIdServer());//DA ELIMINARE
+                                i.putExtra("npartite", getIntent().getStringExtra("npartite"));
+                                i.putExtra("nvittorie", getIntent().getStringExtra("nvittorie"));
                                 startActivity(i);
                                 dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();

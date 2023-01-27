@@ -23,6 +23,7 @@ public class MenuActivity extends AppCompatActivity {
 
     Button btnRegole, btnGioca, btnCrea, btnClassifica, btnLogout;
     TextView tvUser;
+    int npartite, nvittorie;
     DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/");
 
 
@@ -32,8 +33,8 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         tvUser = findViewById(R.id.tvUser);
-        //FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() { //funzionava anche così
-        dbReference.addValueEventListener(new ValueEventListener() {
+
+        dbReference.addValueEventListener(new ValueEventListener() {//PROVA A MODIFICARE CON addListenerForSingleValueEvent
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
@@ -41,6 +42,8 @@ public class MenuActivity extends AppCompatActivity {
                     Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) dataSnapshot.getValue());
                     if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                         tvUser.setText(giocatore.getUsername());
+                        npartite = giocatore.getNVittorie();
+                        nvittorie = giocatore.getNPartite();
                     }
                 }
             }
@@ -64,11 +67,11 @@ public class MenuActivity extends AppCompatActivity {
         btnGioca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //andrà ad attendere di essere aggiunto ad una partita già creata
-
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di essere aggiunto ad una partita");
+                i.putExtra("npartite",npartite);
+                i.putExtra("nvittorie",nvittorie);
                 startActivity(i);
                 finish();
             }
@@ -77,10 +80,11 @@ public class MenuActivity extends AppCompatActivity {
         btnCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
+                i.putExtra("npartite",npartite);
+                i.putExtra("nvittorie",nvittorie);
                 startActivity(i);
                 finish();
             }
@@ -89,13 +93,9 @@ public class MenuActivity extends AppCompatActivity {
         btnClassifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String[] carteCentrali = "1".split(" ");
-                Log.d("fanculo montori",""+(carteCentrali.length>0));
-                Log.d("fanculo montori",""+carteCentrali.length);
-                /*Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
+                Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
                 startActivity(i);
-                finish();*/
+                finish();
             }
         });
 
