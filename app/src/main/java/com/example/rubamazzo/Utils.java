@@ -2,6 +2,13 @@ package com.example.rubamazzo;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
 
 public class Utils {
@@ -54,5 +61,20 @@ public class Utils {
         }
         return vincitore;
     }
+
+    /*public static void getInfoGiocatore(DatabaseReference dbRefGiocatore){
+
+        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
+                final int npartite = snapshot.child("npartite").getValue(Integer.class);
+                final int nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }*/
 
 }

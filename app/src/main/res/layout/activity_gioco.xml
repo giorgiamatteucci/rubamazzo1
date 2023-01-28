@@ -124,4 +124,33 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.48" />
+
+    <Button
+        android:id="@+id/btnDaiCarte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dai_carte"
+        app:layout_constraintBottom_toTopOf="@+id/ivC3_sotto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintStart_toEndOf="@+id/ivMazzo_sotto"
+        app:layout_constraintTop_toBottomOf="@+id/ivMazzo_sopra"
+        app:layout_constraintVertical_bias="0.885" />
+
+    <TextView
+        android:id="@+id/tvTurno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="148dp"
+        android:layout_marginBottom="96dp"
+        android:text="@string/turno"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ivC2_sotto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/ivMazzo_sotto"
+        app:layout_constraintTop_toBottomOf="@+id/rvSotto"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

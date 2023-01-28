@@ -116,10 +116,8 @@ public class AttesaActivity extends AppCompatActivity {
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
-                                i.putExtra("idClient", partita.getIdClient());//DA ELIMINARE
-                                i.putExtra("idServer", partita.getIdServer());//DA ELIMINARE
-                                i.putExtra("npartite", getIntent().getStringExtra("npartite"));
-                                i.putExtra("nvittorie", getIntent().getStringExtra("nvittorie"));
+                                //i.putExtra("npartite", getIntent().getStringExtra("npartite"));
+                                //i.putExtra("nvittorie", getIntent().getStringExtra("nvittorie"));
                                 startActivity(i);
                                 dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();

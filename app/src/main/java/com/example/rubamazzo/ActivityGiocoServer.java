@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +27,8 @@ import java.util.Map;
 
 public class ActivityGiocoServer extends AppCompatActivity {
 
+    TextView tvTurno;
+    Button btnDaiCarte;
     ImageView ivC1Server, ivC2Server, ivC3Server, ivC1Client, ivC2Client, ivC3Client, ivMazzoServer, ivMazzoClient;
     RecyclerView rvSopra, rvSotto;
     RecyclerView.LayoutManager layoutManager;
@@ -37,7 +41,8 @@ public class ActivityGiocoServer extends AppCompatActivity {
     int nCarteMazzoClient, nCarteMazzoServer;
     boolean mioTurno;
     int nMosse;
-    String[] carteServer,carteCentrali;
+    String[] carteClient, carteServer,carteCentrali;
+    int npartite, nvittorie;
 
     Map hashmap = new HashMap<Integer,String>();
 
@@ -45,6 +50,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gioco);
+
+        tvTurno = findViewById(R.id.tvTurno);
+        btnDaiCarte = findViewById(R.id.btnDaiCarte);
 
         ivC1Server = findViewById(R.id.ivC1_sotto);
         ivC2Server = findViewById(R.id.ivC2_sotto);
@@ -72,8 +80,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
         rvSopra.setAdapter(adapterSopra);
 
         idPartita = getIntent().getStringExtra("idPartita");
-        idClient = getIntent().getStringExtra("idClient");
-        idServer = getIntent().getStringExtra("idServer");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
         dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -88,96 +94,50 @@ public class ActivityGiocoServer extends AppCompatActivity {
         nMosse=3;
 
         aggiornaStatoPartita();
-        //estraiDalMazzo3CarteGiocatori();
-        //setCarteCentrali();
-        //FirebaseDatabase.getInstance().getReference("Partita/" + idPartita + "/").child(idClient);//per indicare il turno del client...?
-        //allora il server può giocare  //if(dbRefPartita.child(idServer)){         }
+        //TODO tvTruno non funzionante
+        if(mioTurno) {
+            tvTurno.setVisibility(View.VISIBLE);
+        } else {
+            tvTurno.setVisibility(View.INVISIBLE);
+        }
 
         ivMazzoServer.setImageResource(R.drawable.seleziona_carta);
-        ImageView.OnClickListener onClick = new View.OnClickListener() {
+
+        btnDaiCarte.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Log.d("ONCLICK", "----------------------------------");
-                Log.d("ONCLICK", "nMosse: "+nMosse);
+            public void onClick(View view) {
+                //inserire la parte di dare le carte e fine della partita
                 if(nMosse>0) {
-                    if (mioTurno) {
-                        Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
-
-                        boolean corrispondenza = false;
-
-                        String idCartaMazzoClient = (String) hashmap.get(ivMazzoClient.getId());
-                        Log.d("ONCLICK","idCartaMazzoClient: "+idCartaMazzoClient);
-                        if (!idCartaMazzoClient.equals("") && mazzo.getCartaById(idCartaMazzoClient).getValore() == carta.getValore()) {
-                            corrispondenza = true;
-                            dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
-                            dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+nCarteMazzoClient+1);
-                            nCarteMazzoClient=0;
-                            dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient);
-                            dbRefPartita.child("cartaMazzoS").setValue(idCartaMazzoClient);
-                            dbRefPartita.child("cartaMazzoC").setValue("");
-                            dbRefPartita.child("turno").setValue("client");
-                            nMosse--;
-                        }
-
-                        if (!corrispondenza) {
-                            for (Carta c : carteSopra) {
-                                if (carta.getValore() == c.getValore()) {
-                                    Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
-                                    corrispondenza = true;
-                                    dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
-                                    dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
-                                    dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
-                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
-                                    dbRefPartita.child("turno").setValue("client");
-                                    nMosse--;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!corrispondenza) {
-                            for (Carta c : carteSotto) {
-                                if (carta.getValore() == c.getValore()) {
-                                    Log.d("TAG-REFRESH", "la carta selezionata è nel rvSotto");
-                                    corrispondenza = true;
-                                    dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
-                                    dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
-                                    dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
-                                    dbRefPartita.child("cartaMazzoS").setValue(c.getId());
-                                    dbRefPartita.child("turno").setValue("client");
-                                    nMosse--;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!corrispondenza) {
-                            Log.d("TAG-REFRESH", "la carta selezionata la carta selezionata non è ne sotto ne sopra");
-                            corrispondenza = true;
-                            dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
-                            dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
-                            dbRefPartita.child("turno").setValue("client");
-                            nMosse--;
-                        }
-
-                    } else {
-                        Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(ActivityGiocoServer.this, "i giocatori hanno ancora le carte", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d("ONCLICK", " sono nell'else. mazzo.isEmpty(): "+mazzo.isEmpty());
                     //Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
                     if(mazzo.isEmpty()){
+                        /*//TODO tentativo di dare al server le carte che sono rimaste al centro --------------------------
+                        int j=0;
+                        for (Carta c : carteSopra) {
+                            j++;
+                        }
+                        dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+j);
+                        j=0;
+                        for (Carta c : carteSotto) {
+                            j++;
+                        }
+                        dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+j);
+                        //---------------------------------------------------------------------------------------------*/
+
                         //controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
-                        Log.d("VINCITORE", Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer));
-                        String npartite = getIntent().getStringExtra("npartite");//TODO DA CONTROLLARE
-                        //if(getIntent().getStringExtra("npartite").equals("null")){    npartite = 0;   }
+                        getInfoGiocatore();
                         if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
-                            dbRefGiocatore.child("nvittorie").setValue(getIntent().getStringExtra("nvittorie")+1);
+                            dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
                             Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(ActivityGiocoServer.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
                         }
                         dbRefGiocatore.child("npartite").setValue(npartite+1);
+
+                        dbRefPartita.child("finita").setValue("true");
+
                         Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
                         startActivity(i);
                         finish();
@@ -186,6 +146,84 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         nMosse=3;
                     }
                 }
+            }
+        });
+
+        ImageView.OnClickListener onClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("ONCLICK", "----------------------------------");
+                Log.d("ONCLICK", "nMosse: "+nMosse);
+
+                if (mioTurno) {
+                    Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
+
+                    boolean corrispondenza = false;
+
+                    String idCartaMazzoClient = (String) hashmap.get(ivMazzoClient.getId());
+                    Log.d("ONCLICK","idCartaMazzoClient: "+idCartaMazzoClient);
+                    if (!idCartaMazzoClient.equals("") && mazzo.getCartaById(idCartaMazzoClient).getValore() == carta.getValore()) {
+                        corrispondenza = true;
+                        dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
+                        dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+nCarteMazzoClient+1);
+                        nCarteMazzoClient=0;
+                        dbRefPartita.child("nCarteMazzoC").setValue(nCarteMazzoClient);
+                        dbRefPartita.child("cartaMazzoS").setValue(idCartaMazzoClient);
+                        dbRefPartita.child("cartaMazzoC").setValue("");
+                        dbRefPartita.child("turno").setValue("client");
+                        nMosse--;
+                    }
+
+                    if (!corrispondenza) {
+                        for (Carta c : carteSopra) {
+                            if (carta.getValore() == c.getValore()) {
+                                Log.d("TAG-REFRESH", "la carta selezionata è nel rvSopra");
+                                corrispondenza = true;
+                                dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
+                                dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
+                                dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
+                                dbRefPartita.child("cartaMazzoS").setValue(c.getId());
+                                dbRefPartita.child("turno").setValue("client");
+                                nMosse--;
+
+                                adapterSopra.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!corrispondenza) {
+                        for (Carta c : carteSotto) {
+                            if (carta.getValore() == c.getValore()) {
+                                Log.d("TAG-REFRESH", "la carta selezionata è nel rvSotto");
+                                corrispondenza = true;
+                                dbRefPartita.child("carteCentrali").setValue(Utils.removeCartaDalCentro(carteCentrali,c.getId()));
+                                dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
+                                dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+2);
+                                dbRefPartita.child("cartaMazzoS").setValue(c.getId());
+                                dbRefPartita.child("turno").setValue("client");
+                                nMosse--;
+
+                                adapterSotto.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!corrispondenza) {
+                        Log.d("TAG-REFRESH", "la carta selezionata la carta selezionata non è ne sotto ne sopra");
+                        corrispondenza = true;
+                        dbRefPartita.child("carteServer").setValue(Utils.removeCartaGiocatore(carteServer,carta.getId()));
+                        dbRefPartita.child("carteCentrali").setValue(Utils.addCarteCentrali(carteCentrali,carta.getId()));
+                        dbRefPartita.child("turno").setValue("client");
+                        nMosse--;
+                    }
+
+                } else {
+                    tvTurno.setVisibility(View.INVISIBLE);
+                    Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
+                }
+
                 Log.d("ONCLICK", "----------------------------------");
             }
         };
@@ -195,16 +233,33 @@ public class ActivityGiocoServer extends AppCompatActivity {
         ivC3Server.setOnClickListener(onClick);
     }
 
+    private void getInfoGiocatore(){//TODO non ancora funziona
+        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
+                npartite = snapshot.child("npartite").getValue(Integer.class);
+                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }
+
     private void aggiornaStatoPartita(){
 
         dbRefPartita.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
+                idClient = snapshot.child("idClient").getValue(String.class);
+                idServer = snapshot.child("idServer").getValue(String.class);
+
+                Log.d("TAG-REFRESH"," step 1 ok");
                 carteServer = String.valueOf(snapshot.child("carteServer").getValue(String.class)).split(" ");
                 carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue(String.class)).split(" ");
-                String[] carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
+                carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
 
                 ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
                 ivC2Client.setImageResource(carteClient[1].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
@@ -213,13 +268,10 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 ivC1Server.setImageResource(carteServer[0].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteServer[0]).getIdImmagine());
                 ivC2Server.setImageResource(carteServer[1].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteServer[1]).getIdImmagine());
                 ivC3Server.setImageResource(carteServer[2].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteServer[2]).getIdImmagine());
-                Log.d("TAG-REFRESH","hashmap iniziale: " + hashmap);
+
                 hashmap.put(ivC1Server.getId(),carteServer[0]);
                 hashmap.put(ivC2Server.getId(),carteServer[1]);
                 hashmap.put(ivC3Server.getId(),carteServer[2]);
-                Log.d("TAG-REFRESH","hashmap finale: " + hashmap);
-
-                Log.d("TAG-REFRESH"," step 1 ok");
 
                 carteSotto.clear();
                 carteSopra.clear();
