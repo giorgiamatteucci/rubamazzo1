@@ -84,6 +84,18 @@ public class ActivityGiocoClient extends AppCompatActivity {
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
         dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                npartite = snapshot.child("npartite").getValue(Integer.class);
+                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+
         ImageView.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,7 +237,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
                 for(int i=0;i<carteCentrali.length;i++) {
                     if(carteCentrali[i].equals(""))
-                        break;
+                        break;//TODO potrebbe dare problemi quando veramente le carteCentrali sono vuote (si aggiorna sul db ma non graficamente)
                     if(i%2==0){
                         carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
                         adapterSopra.notifyItemInserted(carteSopra.size()-1);
@@ -268,16 +280,6 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
                 //controllo se la partita è finita
                 if(snapshot.child("finita").getValue() != null){
-                    dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            npartite = snapshot.child("npartite").getValue(Integer.class);
-                            nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) { }
-                    });
                     if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("client")){
                         dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
                         Toast.makeText(ActivityGiocoClient.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();

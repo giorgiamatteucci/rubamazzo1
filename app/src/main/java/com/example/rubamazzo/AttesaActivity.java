@@ -66,8 +66,6 @@ public class AttesaActivity extends AppCompatActivity {
                                 Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
                                 intent.putExtra("idPartita", idPartita);
-                                intent.putExtra("npartite", getIntent().getStringExtra("npartite"));
-                                intent.putExtra("nvittorie", getIntent().getStringExtra("nvittorie"));
                                 startActivity(intent);
                                 finish();
                                 break;
@@ -118,8 +116,6 @@ public class AttesaActivity extends AppCompatActivity {
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
-                                i.putExtra("npartite", getIntent().getStringExtra("npartite"));
-                                i.putExtra("nvittorie", getIntent().getStringExtra("nvittorie"));
                                 startActivity(i);
                                 dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();

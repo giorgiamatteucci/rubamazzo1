@@ -25,7 +25,6 @@ public class MenuActivity extends AppCompatActivity {
     Button btnRegole, btnGioca, btnCrea, btnClassifica, btnLogout;
     TextView tvUser;
     int npartite, nvittorie;
-    //DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/");
     DatabaseReference dbRefGiocatore = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
@@ -41,6 +40,9 @@ public class MenuActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
                 tvUser.setText(giocatore.getUsername());
+                npartite = snapshot.child("npartite").getValue(Integer.class);
+                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+                Log.d("TAGFINE","MenuActivity ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
             }
 
             @Override
@@ -68,8 +70,6 @@ public class MenuActivity extends AppCompatActivity {
                 //andrà ad attendere di essere aggiunto ad una partita già creata
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di essere aggiunto ad una partita");
-                i.putExtra("npartite",npartite);
-                i.putExtra("nvittorie",nvittorie);
                 startActivity(i);
                 finish();
             }
@@ -81,8 +81,8 @@ public class MenuActivity extends AppCompatActivity {
                 //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
-                //i.putExtra("npartite",npartite);
-                //i.putExtra("nvittorie",nvittorie);
+                i.putExtra("npartite",npartite);
+                i.putExtra("nvittorie",nvittorie);
                 startActivity(i);
                 finish();
             }

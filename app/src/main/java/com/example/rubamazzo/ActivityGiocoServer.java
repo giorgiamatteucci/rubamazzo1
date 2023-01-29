@@ -80,8 +80,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
         rvSopra.setAdapter(adapterSopra);
 
         idPartita = getIntent().getStringExtra("idPartita");
-        //npartite = Integer.parseInt(getIntent().getStringExtra("npartite"));
-        //nvittorie = Integer.parseInt(getIntent().getStringExtra("nvittorie"));
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
         dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -95,6 +93,17 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
         nMosse=3;
 
+        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                npartite = snapshot.child("npartite").getValue(Integer.class);
+                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
         aggiornaStatoPartita();
 
 
@@ -110,7 +119,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                     Log.d("ONCLICK", " sono nell'else. mazzo.isEmpty(): "+mazzo.isEmpty());
                     //Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
                     if(mazzo.isEmpty()){
-                        /*//TODO tentativo di dare al server le carte che sono rimaste al centro --------------------------
+                        /*//TODO tentativo di aasegnare al server le carte che sono rimaste al centro --------------------------
                         int j=0;
                         for (Carta c : carteSopra) {
                             j++;
@@ -124,19 +133,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         //---------------------------------------------------------------------------------------------*/
 
                         //controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
-                        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                npartite = snapshot.child("npartite").getValue(Integer.class);
-                                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) { }
-                        });
                         Log.d("TAGFINE","dbRefGiocatore: "+ dbRefGiocatore);
-                        Log.d("TAGFINE","npartite: "+ npartite);
-                        Log.d("TAGFINE","nvittorie: "+ nvittorie);
+                        Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite);
+                        Log.d("TAGFINE","ActivityGiocoServer ---- nvittorie: "+ nvittorie);
                         if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
                             dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
                             Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
@@ -270,7 +269,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
                 for(int i=0;i<carteCentrali.length;i++) {
                     if(carteCentrali[i].equals(""))
-                        break;
+                        break;//TODO potrebbe dare problemi quando veramente le carteCentrali sono vuote (si aggiorna sul db ma non graficamente)
                     if(i%2==0){
                         carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
                         adapterSopra.notifyItemInserted(carteSopra.size()-1);

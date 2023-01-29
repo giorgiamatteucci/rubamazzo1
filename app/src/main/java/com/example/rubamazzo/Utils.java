@@ -62,18 +62,4 @@ public class Utils {
         return vincitore;
     }
 
-    /*public static Giocatore getGiocatore(DatabaseReference dbRefGiocatore){
-        Giocatore giocatore;
-        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-        return giocatore;
-    }*/
-
 }
