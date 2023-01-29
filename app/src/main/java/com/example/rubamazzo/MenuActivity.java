@@ -1,5 +1,6 @@
 package com.example.rubamazzo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -24,7 +25,8 @@ public class MenuActivity extends AppCompatActivity {
     Button btnRegole, btnGioca, btnCrea, btnClassifica, btnLogout;
     TextView tvUser;
     int npartite, nvittorie;
-    DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/");
+    //DatabaseReference dbReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/");
+    DatabaseReference dbRefGiocatore = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Giocatore/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
     @Override
@@ -34,21 +36,17 @@ public class MenuActivity extends AppCompatActivity {
 
         tvUser = findViewById(R.id.tvUser);
 
-        dbReference.addValueEventListener(new ValueEventListener() {//PROVA A MODIFICARE CON addListenerForSingleValueEvent
+        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                for(DataSnapshot dataSnapshot :snapshot.getChildren()){
-                    Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) dataSnapshot.getValue());
-                    if(giocatore.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
-                        tvUser.setText(giocatore.getUsername());
-                        npartite = giocatore.getNVittorie();
-                        nvittorie = giocatore.getNPartite();
-                    }
-                }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
+                tvUser.setText(giocatore.getUsername());
             }
+
             @Override
-            public void onCancelled(DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
         btnRegole = findViewById(R.id.btnRegole);
         btnGioca = findViewById(R.id.btnGioca);

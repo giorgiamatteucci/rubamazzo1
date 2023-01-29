@@ -62,19 +62,18 @@ public class Utils {
         return vincitore;
     }
 
-    /*public static void getInfoGiocatore(DatabaseReference dbRefGiocatore){
-
+    /*public static Giocatore getGiocatore(DatabaseReference dbRefGiocatore){
+        Giocatore giocatore;
         dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
-                final int npartite = snapshot.child("npartite").getValue(Integer.class);
-                final int nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+                giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
+        return giocatore;
     }*/
 
 }

@@ -58,7 +58,7 @@ public class ActivityClassifica extends AppCompatActivity {
             }
         });
         /*
-            TODO:  QUERY PER RECUPERARE GLLI UTENTI
+            TODO:  QUERY PER RECUPERARE GLI UTENTI
                     - se si può parametrizzare la query prendi direttamente i top 5/10
                     - altrimenti prendi tutti gli utenti e poi li filtriamo qui nella classe java
          */
@@ -75,10 +75,6 @@ public class ActivityClassifica extends AppCompatActivity {
                         giocatori.add(giocatore);
                     }
                     rigaAdapter.notifyDataSetChanged();
-
-                    // This method is called once with the initial value and again whenever data at this location is updated.
-                    //String value = snapshot.getValue(String.class);
-                    //Log.d(TAG, "Value is: " + value);
                 }
                 @Override
                 public void onCancelled(DatabaseError error) {
