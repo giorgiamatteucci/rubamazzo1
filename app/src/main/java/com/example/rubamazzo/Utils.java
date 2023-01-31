@@ -28,8 +28,13 @@ public class Utils {
 
     public static String addCarteCentrali(String[] carteCentrali, String id) {
         String output = "";
+        boolean centraliVuote = false;
         if(carteCentrali.length>0) {
             for (int i = 0; i < carteCentrali.length; i++) {
+                if(carteCentrali[0].equals("")){
+                    centraliVuote = true;
+                    break;
+                }
                 output += carteCentrali[i] + " ";
             }
             output +=id;
