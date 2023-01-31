@@ -266,6 +266,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
                 Log.d("TAG-REFRESH"," step 1 ok");
                 carteServer = String.valueOf(snapshot.child("carteServer").getValue(String.class)).split(" ");
+                Log.d("FIX2"," carteCentrali: -"+String.valueOf(snapshot.child("carteCentrali").getValue(String.class))+"-");
                 carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue(String.class)).split(" ");
                 carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
 

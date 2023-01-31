@@ -198,6 +198,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
                 carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
                 carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue(String.class)).split(" ");
+                Log.d("FIX2"," carteCentrali: -"+String.valueOf(snapshot.child("carteCentrali").getValue(String.class))+"-");
                 String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue(String.class)).split(" ");
 
                 ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[0]).getIdImmagine());
