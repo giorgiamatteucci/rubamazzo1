@@ -28,20 +28,18 @@ public class Utils {
 
     public static String addCarteCentrali(String[] carteCentrali, String id) {
         String output = "";
-        boolean centraliVuote = false;
         if(carteCentrali.length>0) {
             for (int i = 0; i < carteCentrali.length; i++) {
                 if(carteCentrali[0].equals("")){
-                    centraliVuote = true;
                     break;
                 }
                 output += carteCentrali[i] + " ";
             }
             output +=id;
-            Log.d("FIX2"," if output+=id: -"+output+"-");
+            //Log.d("FIX2"," if output+=id: -"+output+"-");
         }else{
             output=id;
-            Log.d("FIX2"," else output=id: -"+output+"-");
+            //Log.d("FIX2"," else output=id: -"+output+"-");
         }
 
         return output;
@@ -84,7 +82,7 @@ public class Utils {
         int N = giocatori.size();
 
         ArrayList<Giocatore> topFive = new ArrayList<>();
-        for(int i=0;i<N;i++){
+        for(int i=0;i<N-1;i++){
             Log.d("ordinamento"," i: "+i);
             int j = min(giocatori,i);
             Giocatore tmp = giocatori.get(i);
@@ -111,7 +109,6 @@ public class Utils {
                 min = h;
             }
         }
-
         return min;
     }
 

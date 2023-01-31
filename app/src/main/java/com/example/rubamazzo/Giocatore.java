@@ -1,5 +1,7 @@
 package com.example.rubamazzo;
 
+import android.util.Log;
+
 public class Giocatore {
     private String key, username, email, password;
     private int nVittorie, nPartite;
@@ -43,6 +45,14 @@ public class Giocatore {
     public boolean minCustom(Giocatore g2){
         Float myPerc = ((float) this.getNVittorie() / this.getNPartite()) * 100;
         Float percG2 = ((float) g2.getNVittorie() / g2.getNPartite()) * 100;
+        //Log.d("ordinamento","myPerc<percG2 : "+myPerc+"<"+percG2+ " : "+(myPerc<percG2));
+
+        if(myPerc.isNaN())
+            return true;
+
+        if(percG2.isNaN())
+            return false;
+
         return myPerc<percG2;
     }
 }
