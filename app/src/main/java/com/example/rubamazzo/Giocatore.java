@@ -13,6 +13,15 @@ public class Giocatore {
         this.password=password;
     }
 
+    public Giocatore(String key, String username,String email,String password, int nPartite, int nVittorie) {
+        this.nPartite = nPartite;
+        this.nVittorie = nVittorie;
+        this.key=key;
+        this.username=username;
+        this.email=email;
+        this.password=password;
+    }
+
     public String getKey(){return key;}
     public String getUsername(){return username;}
     public String getEmail(){return email;}
@@ -29,5 +38,11 @@ public class Giocatore {
 
     public String toStringCustom(){
         return "email: "+this.email+" password: "+this.password+" username: "+this.username+" nPartite: "+this.nPartite+" nVittorie: "+this.nVittorie;
+    }
+
+    public boolean minCustom(Giocatore g2){
+        Float myPerc = ((float) this.getNVittorie() / this.getNPartite()) * 100;
+        Float percG2 = ((float) g2.getNVittorie() / g2.getNPartite()) * 100;
+        return myPerc<percG2;
     }
 }

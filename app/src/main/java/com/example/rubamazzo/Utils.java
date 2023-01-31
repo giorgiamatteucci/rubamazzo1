@@ -9,12 +9,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Utils {
 
     public static Giocatore getGiocatoreFromHashMap(HashMap hashmap){
-        return new Giocatore((String) hashmap.get("key"), (String) hashmap.get("username"),(String) hashmap.get("email"),(String) hashmap.get("password"));
+
+        Long npartite =  (Long) hashmap.get("npartite");
+        Long nvittorie = (Long) hashmap.get("nvittorie");
+
+        return new Giocatore((String) hashmap.get("key"), (String) hashmap.get("username"),(String) hashmap.get("email"),(String) hashmap.get("password"),npartite.intValue(),nvittorie.intValue());
     }
 
     public static Partita getPartitaFromHashMap(HashMap hashmap){
@@ -60,6 +65,42 @@ public class Utils {
             vincitore = "client";
         }
         return vincitore;
+    }
+
+    public static ArrayList<Giocatore> getTopFive(ArrayList<Giocatore> giocatori){
+
+        int N = giocatori.size();
+
+        ArrayList<Giocatore> topFive = new ArrayList<>();
+        for(int i=0;i<N;i++){
+            Log.d("ordinamento"," i: "+i);
+            int j = min(giocatori,i);
+            Giocatore tmp = giocatori.get(i);
+            giocatori.set(i,giocatori.get(j));
+            giocatori.set(j,tmp);
+        }
+
+        if(N>5){
+            for(int i=0;i<5;i++){
+                topFive.add(giocatori.get(N-i-1));
+            }
+        }else {
+            topFive = giocatori;
+        }
+
+        return topFive;
+    }
+
+    private static int min(ArrayList<Giocatore> giocatori, int i){
+        int min = i;
+        for(int h = i+1;h<giocatori.size();h++){
+            Log.d("ordinamento"," h: "+h+" i: "+i);
+            if(giocatori.get(h).minCustom(giocatori.get(min))){
+                min = h;
+            }
+        }
+
+        return min;
     }
 
 }

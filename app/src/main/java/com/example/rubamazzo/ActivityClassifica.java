@@ -66,16 +66,20 @@ public class ActivityClassifica extends AppCompatActivity {
         /*
             TODO  Vengono stampati nell'ordine opposto
          */
-       FirebaseDatabase.getInstance().getReference("Giocatore").orderByChild("nvittorie").limitToLast(5).addValueEventListener(new ValueEventListener() {
+       FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
+                ArrayList<Giocatore> allGiocatori = new ArrayList<>();
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()){
                     HashMap hasmap = (HashMap) dataSnapshot.getValue();
                     Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
                     Log.d("TAGCLASSIFICA", "ActivityClassifica ---- " + giocatore.toStringCustom());
-                    giocatori.add(giocatore);
+                    allGiocatori.add(giocatore);
                 }
-                Log.d("TAGCLASSIFICA", "giocatori.size(): "+String.valueOf(giocatori.size()));
+                Log.d("TAGCLASSIFICA", "giocatori.size(): "+String.valueOf(allGiocatori.size()));
+                giocatori.addAll(Utils.getTopFive(allGiocatori));
+                Log.d("TOPFIVE", ""+giocatori.size());
                 rigaAdapter.notifyDataSetChanged();
             }
             @Override
