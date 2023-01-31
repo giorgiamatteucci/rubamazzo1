@@ -67,6 +67,7 @@ public class AttesaActivity extends AppCompatActivity {
                                 Toast.makeText(AttesaActivity.this, "Ti sei unito alla partita.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AttesaActivity.this, ActivityGiocoClient.class);
                                 intent.putExtra("idPartita", idPartita);
+                                dbReference.child("Partita/").removeEventListener(this);
                                 startActivity(intent);
                                 finish();
                                 break;

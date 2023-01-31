@@ -31,7 +31,7 @@ public class Utils {
         for (int i = 0; i < carteCentrali.length; i++) {
             output += carteCentrali[i] + " ";
         }
-        output += id;
+        output += id + " ";
         return output;
     }
 
