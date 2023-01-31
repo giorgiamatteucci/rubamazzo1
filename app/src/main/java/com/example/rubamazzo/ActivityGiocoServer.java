@@ -42,6 +42,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
     boolean mioTurno;
     int nMosse;
     String[] carteClient, carteServer,carteCentrali;
+    Giocatore giocatore;
     int npartite, nvittorie;
 
     Map hashmap = new HashMap<Integer,String>();
@@ -96,9 +97,13 @@ public class ActivityGiocoServer extends AppCompatActivity {
         dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
                 npartite = snapshot.child("npartite").getValue(Integer.class);
                 nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+                giocatore.setNPartite(npartite);
+                giocatore.setNVittorie(nvittorie);
                 Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
+                Log.d("TAGFINE","ActivityGiocoServer ---- giocatore: "+ giocatore.toStringCustom());
             }
 
             @Override
@@ -138,12 +143,13 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         Log.d("TAGFINE","ActivityGiocoServer ---- nvittorie: "+ nvittorie);
                         if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
                             dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
+                            giocatore.incNVittorie();
                             Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(ActivityGiocoServer.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
                         }
                         dbRefGiocatore.child("npartite").setValue(npartite+1);
-
+                        giocatore.incNPartite();
                         dbRefPartita.child("finita").setValue("true");
 
                         Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);

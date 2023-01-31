@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ActivityGiocoClient extends AppCompatActivity {
 
@@ -42,6 +40,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
     boolean mioTurno;
     String[] carteClient,carteCentrali;
     int nCarteMazzoClient, nCarteMazzoServer;
+    Giocatore giocatore;
     int npartite, nvittorie;
 
     Map hashmap = new HashMap<Integer,String>();
@@ -87,9 +86,13 @@ public class ActivityGiocoClient extends AppCompatActivity {
         dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
                 npartite = snapshot.child("npartite").getValue(Integer.class);
                 nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
-                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
+                giocatore.setNPartite(npartite);
+                giocatore.setNVittorie(nvittorie);
+                Log.d("TAGFINE","ActivityGiocoClient ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
+                Log.d("TAGFINE","ActivityGiocoClient ---- giocatore: "+ giocatore.toStringCustom());
             }
 
             @Override
@@ -282,11 +285,13 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 if(snapshot.child("finita").getValue() != null){
                     if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("client")){
                         dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
+                        giocatore.incNVittorie();
                         Toast.makeText(ActivityGiocoClient.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(ActivityGiocoClient.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
                     }
                     dbRefGiocatore.child("npartite").setValue(npartite+1);
+                    giocatore.incNPartite();
                     Intent i = new Intent(ActivityGiocoClient.this, MenuActivity.class);
                     startActivity(i);
                     finish();

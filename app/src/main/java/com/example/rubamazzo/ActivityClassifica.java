@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ListIterator;
 
 public class ActivityClassifica extends AppCompatActivity {
 
@@ -47,6 +48,7 @@ public class ActivityClassifica extends AppCompatActivity {
         rigaAdapter = new RigaAdapter(giocatori);
         rvClassifica.setAdapter(rigaAdapter);
         myUsername = findViewById(R.id.tvMyUser);
+
         getGiocatori();
 
         btnIndietro.setOnClickListener(new View.OnClickListener() {
@@ -57,29 +59,29 @@ public class ActivityClassifica extends AppCompatActivity {
                 finish();
             }
         });
-        /*
-            TODO:  QUERY PER RECUPERARE GLI UTENTI
-                    - se si può parametrizzare la query prendi direttamente i top 5/10
-                    - altrimenti prendi tutti gli utenti e poi li filtriamo qui nella classe java
-         */
-
     }
 
     private void getGiocatori(){
-           FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    for(DataSnapshot dataSnapshot :snapshot.getChildren()){
-                        HashMap hasmap = (HashMap) dataSnapshot.getValue();
-                        Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
-                        giocatori.add(giocatore);
-                    }
-                    rigaAdapter.notifyDataSetChanged();
+        giocatori.clear();
+        /*
+            TODO  Vengono stampati nell'ordine opposto
+         */
+       FirebaseDatabase.getInstance().getReference("Giocatore").orderByChild("nvittorie").limitToLast(5).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot :snapshot.getChildren()){
+                    HashMap hasmap = (HashMap) dataSnapshot.getValue();
+                    Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
+                    Log.d("TAGCLASSIFICA", "ActivityClassifica ---- " + giocatore.toStringCustom());
+                    giocatori.add(giocatore);
                 }
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    Log.d(TAG, "Failed to read value.", error.toException());
-                }
-            });
+                Log.d("TAGCLASSIFICA", "giocatori.size(): "+String.valueOf(giocatori.size()));
+                rigaAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.d(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 }

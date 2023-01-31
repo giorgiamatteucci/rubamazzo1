@@ -38,11 +38,20 @@ public class MenuActivity extends AppCompatActivity {
         dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
-                tvUser.setText(giocatore.getUsername());
-                npartite = snapshot.child("npartite").getValue(Integer.class);
-                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
-                Log.d("TAGFINE","MenuActivity ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
+                try {
+                    Giocatore giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
+                    tvUser.setText(giocatore.getUsername());
+                    npartite = snapshot.child("npartite").getValue(Integer.class);
+                    nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
+                    giocatore.setNPartite(npartite);
+                    giocatore.setNVittorie(nvittorie);
+                    Log.d("TAGFINE", "MenuActivity ---- npartite: " + npartite + ", nvittorie: " + nvittorie);
+                    Log.d("TAGCLASSIFICA", "MenuActivity ---- " + giocatore.toStringCustom());
+                }catch (NullPointerException e) {
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(MenuActivity.this, MainActivity.class));
+                    finish();
+                }
             }
 
             @Override

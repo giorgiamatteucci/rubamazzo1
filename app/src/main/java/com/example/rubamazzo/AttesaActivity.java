@@ -39,7 +39,7 @@ public class AttesaActivity extends AppCompatActivity {
 
         tvAttesaPartita = findViewById(R.id.tvAttesaPartita);
         tvAttesaPartita.setText(getIntent().getStringExtra("testo"));
-        btnAnnulla = findViewById(R.id.btnGioca);
+        btnAnnulla = findViewById(R.id.btnAnnulla);
         btnAnnulla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,9 +49,10 @@ public class AttesaActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")) {//CLIENT
-
-            dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
+        if (getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")) {
+            //CLIENT
+            //dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
+            dbReference.child("Partita/").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getChildrenCount() == 0) {
@@ -78,11 +79,9 @@ public class AttesaActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
-        } else {//SERVER
-            Log.d("TAGFINE","getIntent().getStringExtra(\"npartite\"): "+ getIntent().getStringExtra("npartite"));
-            Log.d("TAGFINE","getIntent().getStringExtra(\"nvittorie\"): "+ getIntent().getStringExtra("nvittorie"));
+        } else {
+            //SERVER
             dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
-
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String idPartita = String.valueOf(System.currentTimeMillis());
