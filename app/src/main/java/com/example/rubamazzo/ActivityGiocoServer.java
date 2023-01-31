@@ -182,8 +182,10 @@ public class ActivityGiocoServer extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("ONCLICK", "----------------------------------");
 
-                if (mioTurno) {
-                    Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
+                String idCartaCliccata = (String) hashmap.get(v.getId());
+
+                if (mioTurno && !idCartaCliccata.equals(""+R.drawable.seleziona_carta)) {
+                    Carta carta = mazzo.getCartaById(idCartaCliccata);
 
                     boolean corrispondenza = false;
 
@@ -242,7 +244,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         nMosse--;
                     }
 
-                } else {
+                } else if(!mioTurno){
                     Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
                 }
 
