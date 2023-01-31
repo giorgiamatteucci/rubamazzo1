@@ -28,10 +28,15 @@ public class Utils {
 
     public static String addCarteCentrali(String[] carteCentrali, String id) {
         String output = "";
-        for (int i = 0; i < carteCentrali.length; i++) {
-            output += carteCentrali[i] + " ";
+        if(carteCentrali.length>0) {
+            for (int i = 0; i < carteCentrali.length; i++) {
+                output += carteCentrali[i] + " ";
+            }
+            output += id;
+        }else{
+            output = id;
         }
-        output += id;
+
         return output;
     }
 
