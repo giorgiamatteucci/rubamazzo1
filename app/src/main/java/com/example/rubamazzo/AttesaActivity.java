@@ -92,9 +92,10 @@ public class AttesaActivity extends AppCompatActivity {
                     dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String idClient = snapshot.child("idClient").getValue(String.class);
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
                             if (!partita.getIdClient().isEmpty()) {
+                                String idClient = snapshot.child("idClient").getValue(String.class);
+                                Log.d("TAGFINE","AttesaActivity ---- idClient: " + idClient);
                                 String  c1client, c2client, c3client, c1server, c2server, c3server;
                                 c1client = mazzo.estraiCarta().getId();
                                 c2client = mazzo.estraiCarta().getId();

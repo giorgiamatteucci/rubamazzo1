@@ -157,7 +157,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         //controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
                         if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
                             dbRefGiocServer.child("nvittorie").setValue(nvittorieServer+1);
-                            giocatoreServer.incNVittorie();
                             Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                         }else{
                             dbRefGiocClient.child("nvittorie").setValue(nvittorieClient+1);
@@ -165,7 +164,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         }
                         dbRefGiocServer.child("npartite").setValue(npartiteServer+1);
                         dbRefGiocClient.child("npartite").setValue(npartiteClient+1);
-                        //giocatoreServer.incNPartite();
                         dbRefPartita.child("finita").setValue("true");
 
                         Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
