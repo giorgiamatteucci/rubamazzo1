@@ -94,6 +94,8 @@ public class AttesaActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
                             if (!partita.getIdClient().isEmpty()) {
+                                String idClient = snapshot.child("idClient").getValue(String.class);
+                                Log.d("TAGFINE","AttesaActivity ---- idClient: " + idClient);
                                 String  c1client, c2client, c3client, c1server, c2server, c3server;
                                 c1client = mazzo.estraiCarta().getId();
                                 c2client = mazzo.estraiCarta().getId();
@@ -115,6 +117,7 @@ public class AttesaActivity extends AppCompatActivity {
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
+                                i.putExtra("idClient", idClient);
                                 startActivity(i);
                                 dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();

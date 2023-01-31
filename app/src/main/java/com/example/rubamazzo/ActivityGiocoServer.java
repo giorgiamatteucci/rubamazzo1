@@ -36,14 +36,14 @@ public class ActivityGiocoServer extends AppCompatActivity {
     ArrayList<Carta> carteSotto, carteSopra;
 
     String idPartita, idClient, idServer;
-    DatabaseReference dbRefPartita, dbRefGiocatore;
+    DatabaseReference dbRefPartita, dbRefGiocServer, dbRefGiocClient;
     Mazzo mazzo;
     int nCarteMazzoClient, nCarteMazzoServer;
     boolean mioTurno;
     int nMosse;
     String[] carteClient, carteServer,carteCentrali;
-    Giocatore giocatore;
-    int npartite, nvittorie;
+    Giocatore giocatoreClient, giocatoreServer;
+    int npartiteServer, nvittorieServer, npartiteClient, nvittorieClient;
 
     Map hashmap = new HashMap<Integer,String>();
 
@@ -82,7 +82,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
         idPartita = getIntent().getStringExtra("idPartita");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
-        dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        dbRefGiocServer = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        dbRefGiocClient = FirebaseDatabase.getInstance().getReference("Giocatore").child(getIntent().getStringExtra("idClient"));
+
 
         mazzo = Mazzo.getIstance();
         ivC1Client.setImageResource(R.drawable.retro);
@@ -94,16 +96,31 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
         nMosse=3;
 
-        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRefGiocServer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
-                npartite = snapshot.child("npartite").getValue(Integer.class);
-                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
-                giocatore.setNPartite(npartite);
-                giocatore.setNVittorie(nvittorie);
-                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
-                Log.d("TAGFINE","ActivityGiocoServer ---- giocatore: "+ giocatore.toStringCustom());
+                giocatoreServer = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
+                npartiteServer = snapshot.child("npartite").getValue(Integer.class);
+                nvittorieServer = snapshot.child("nvittorie").getValue(Integer.class);
+                giocatoreServer.setNPartite(npartiteServer);
+                giocatoreServer.setNVittorie(nvittorieServer);
+                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartiteServer+", nvittorie: "+ nvittorieServer);
+                Log.d("TAGFINE","ActivityGiocoServer ---- giocatore: "+ giocatoreServer.toStringCustom());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+        dbRefGiocClient.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                giocatoreClient = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
+                npartiteClient = snapshot.child("npartite").getValue(Integer.class);
+                nvittorieClient = snapshot.child("nvittorie").getValue(Integer.class);
+                giocatoreClient.setNPartite(npartiteClient);
+                giocatoreClient.setNVittorie(nvittorieClient);
+                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartiteClient+", nvittorie: "+ nvittorieClient);
+                Log.d("TAGFINE","ActivityGiocoServer ---- giocatore: "+ giocatoreClient.toStringCustom());
             }
 
             @Override
@@ -138,18 +155,15 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         //---------------------------------------------------------------------------------------------*/
 
                         //controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
-                        Log.d("TAGFINE","dbRefGiocatore: "+ dbRefGiocatore);
-                        Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartite);
-                        Log.d("TAGFINE","ActivityGiocoServer ---- nvittorie: "+ nvittorie);
                         if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
-                            dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
-                            giocatore.incNVittorie();
+                            dbRefGiocServer.child("nvittorie").setValue(nvittorieServer+1);
                             Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                         }else{
+                            dbRefGiocClient.child("nvittorie").setValue(nvittorieClient+1);
                             Toast.makeText(ActivityGiocoServer.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
                         }
-                        dbRefGiocatore.child("npartite").setValue(npartite+1);
-                        giocatore.incNPartite();
+                        dbRefGiocServer.child("npartite").setValue(npartiteServer+1);
+                        dbRefGiocClient.child("npartite").setValue(npartiteClient+1);
                         dbRefPartita.child("finita").setValue("true");
 
                         Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
@@ -229,7 +243,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                     }
 
                 } else {
-                    //tvTurno.setVisibility(View.INVISIBLE);
                     Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
                 }
 

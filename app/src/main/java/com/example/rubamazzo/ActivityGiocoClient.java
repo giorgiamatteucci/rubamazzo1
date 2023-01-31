@@ -34,14 +34,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     CartaAdapter adapterSopra, adapterSotto;
     ArrayList<Carta> carteSotto, carteSopra;
-    DatabaseReference dbRefPartita, dbRefGiocatore;
+    DatabaseReference dbRefPartita;
     Mazzo mazzo = Mazzo.getIstance();
     String idPartita;
     boolean mioTurno;
     String[] carteClient,carteCentrali;
     int nCarteMazzoClient, nCarteMazzoServer;
-    Giocatore giocatore;
-    int npartite, nvittorie;
 
     Map hashmap = new HashMap<Integer,String>();
 
@@ -81,23 +79,6 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
         idPartita = getIntent().getStringExtra("idPartita");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
-        dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
-                npartite = snapshot.child("npartite").getValue(Integer.class);
-                nvittorie = snapshot.child("nvittorie").getValue(Integer.class);
-                giocatore.setNPartite(npartite);
-                giocatore.setNVittorie(nvittorie);
-                Log.d("TAGFINE","ActivityGiocoClient ---- npartite: "+ npartite+", nvittorie: "+ nvittorie);
-                Log.d("TAGFINE","ActivityGiocoClient ---- giocatore: "+ giocatore.toStringCustom());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
 
         ImageView.OnClickListener onClick = new View.OnClickListener() {
             @Override
@@ -284,14 +265,10 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 //controllo se la partita è finita
                 if(snapshot.child("finita").getValue() != null){
                     if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("client")){
-                        dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
-                        giocatore.incNVittorie();
                         Toast.makeText(ActivityGiocoClient.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(ActivityGiocoClient.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
                     }
-                    dbRefGiocatore.child("npartite").setValue(npartite+1);
-                    giocatore.incNPartite();
                     Intent i = new Intent(ActivityGiocoClient.this, MenuActivity.class);
                     startActivity(i);
                     finish();
