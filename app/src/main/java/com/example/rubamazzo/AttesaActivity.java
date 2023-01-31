@@ -92,6 +92,7 @@ public class AttesaActivity extends AppCompatActivity {
                     dbReference.child("Partita/"+idPartita).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String idClient = snapshot.child("idClient").getValue(String.class);
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
                             if (!partita.getIdClient().isEmpty()) {
                                 String  c1client, c2client, c3client, c1server, c2server, c3server;
@@ -115,6 +116,7 @@ public class AttesaActivity extends AppCompatActivity {
 
                                 Intent i = new Intent(AttesaActivity.this, ActivityGiocoServer.class);
                                 i.putExtra("idPartita", idPartita);
+                                i.putExtra("idClient", idClient);
                                 startActivity(i);
                                 dbReference.child("Partita/"+idPartita).removeEventListener(this);
                                 finish();

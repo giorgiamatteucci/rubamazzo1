@@ -81,9 +81,9 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
         idPartita = getIntent().getStringExtra("idPartita");
         dbRefPartita = FirebaseDatabase.getInstance().getReferenceFromUrl("https://rubamazzo-735b7-default-rtdb.firebaseio.com/Partita/"+idPartita);
-        dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //dbRefGiocatore = FirebaseDatabase.getInstance().getReference("Giocatore").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
+        /*dbRefGiocatore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 giocatore = Utils.getGiocatoreFromHashMap((HashMap) snapshot.getValue());
@@ -97,7 +97,7 @@ public class ActivityGiocoClient extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
-        });
+        });*/
 
         ImageView.OnClickListener onClick = new View.OnClickListener() {
             @Override
@@ -284,14 +284,14 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 //controllo se la partita è finita
                 if(snapshot.child("finita").getValue() != null){
                     if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("client")){
-                        dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
-                        giocatore.incNVittorie();
+                        //dbRefGiocatore.child("nvittorie").setValue(nvittorie+1);
+                        //giocatore.incNVittorie();
                         Toast.makeText(ActivityGiocoClient.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(ActivityGiocoClient.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
                     }
-                    dbRefGiocatore.child("npartite").setValue(npartite+1);
-                    giocatore.incNPartite();
+                    //dbRefGiocatore.child("npartite").setValue(npartite+1);
+                    //giocatore.incNPartite();
                     Intent i = new Intent(ActivityGiocoClient.this, MenuActivity.class);
                     startActivity(i);
                     finish();
