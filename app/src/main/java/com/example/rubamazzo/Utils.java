@@ -32,9 +32,11 @@ public class Utils {
             for (int i = 0; i < carteCentrali.length; i++) {
                 output += carteCentrali[i] + " ";
             }
-            output += id;
+            output +=id;
+            Log.d("FIX2"," if output+=id: -"+output+"-");
         }else{
-            output = id;
+            output=id;
+            Log.d("FIX2"," else output=id: -"+output+"-");
         }
 
         return output;
