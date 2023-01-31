@@ -287,6 +287,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 Log.d("TAG-REFRESH"," step 2 ok");
 
                 for(int i=0;i<carteCentrali.length;i++) {
+                    Log.d("FIX2","carteCentrali["+i+"]: "+carteCentrali[i]);
                     if(carteCentrali[i].equals(""))
                         break;//TODO potrebbe dare problemi quando veramente le carteCentrali sono vuote (si aggiorna sul db ma non graficamente)
                     if(i%2==0){

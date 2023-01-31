@@ -63,9 +63,6 @@ public class ActivityClassifica extends AppCompatActivity {
 
     private void getGiocatori(){
         giocatori.clear();
-        /*
-            TODO  Vengono stampati nell'ordine opposto
-         */
        FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
