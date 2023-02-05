@@ -104,8 +104,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 nvittorieServer = snapshot.child("nvittorie").getValue(Integer.class);
                 giocatoreServer.setNPartite(npartiteServer);
                 giocatoreServer.setNVittorie(nvittorieServer);
-                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartiteServer+", nvittorie: "+ nvittorieServer);
-                Log.d("TAGFINE","ActivityGiocoServer ---- giocatore: "+ giocatoreServer.toStringCustom());
             }
 
             @Override
@@ -119,8 +117,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 nvittorieClient = snapshot.child("nvittorie").getValue(Integer.class);
                 giocatoreClient.setNPartite(npartiteClient);
                 giocatoreClient.setNVittorie(nvittorieClient);
-                Log.d("TAGFINE","ActivityGiocoServer ---- npartite: "+ npartiteClient+", nvittorie: "+ nvittorieClient);
-                Log.d("TAGFINE","ActivityGiocoServer ---- giocatore: "+ giocatoreClient.toStringCustom());
             }
 
             @Override
@@ -134,41 +130,38 @@ public class ActivityGiocoServer extends AppCompatActivity {
         btnDaiCarte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String risultato;
                 //inserire la parte di dare le carte e fine della partita
                 if(nMosse>0) {
                     Toast.makeText(ActivityGiocoServer.this, "i giocatori hanno ancora le carte", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("ONCLICK", " sono nell'else. mazzo.isEmpty(): "+mazzo.isEmpty());
                     //Se il mazzo.isEmpty() la partita è finita Altrimenti assegna tre carte sia al server che al client
                     if(mazzo.isEmpty()){
-                        /*//TODO tentativo di aasegnare al server le carte che sono rimaste al centro --------------------------
-                        int j=0;
-                        for (Carta c : carteSopra) {
-                            j++;
-                        }
-                        dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+j);
-                        j=0;
-                        for (Carta c : carteSotto) {
-                            j++;
-                        }
-                        dbRefPartita.child("nCarteMazzoS").setValue(nCarteMazzoServer+j);
-                        //---------------------------------------------------------------------------------------------*/
-
                         //controllare se chi ha vinto nel db e stampare un toast per poi tornare alla MenuActivity
                         if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("server")){
                             dbRefGiocServer.child("nvittorie").setValue(nvittorieServer+1);
-                            Toast.makeText(ActivityGiocoServer.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
+                            risultato = "HAI VINTO!";
                         }else{
                             dbRefGiocClient.child("nvittorie").setValue(nvittorieClient+1);
-                            Toast.makeText(ActivityGiocoServer.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
+                            risultato = "HAI PERSO!";
                         }
                         dbRefGiocServer.child("npartite").setValue(npartiteServer+1);
                         dbRefGiocClient.child("npartite").setValue(npartiteClient+1);
-                        dbRefPartita.child("finita").setValue("true");
 
-                        Intent i = new Intent(ActivityGiocoServer.this, MenuActivity.class);
-                        startActivity(i);
-                        finish();
+                        FineDialog d = new FineDialog(ActivityGiocoServer.this,risultato,"Tu avevi " + nCarteMazzoServer + " carte","Il tuo avversario "+ nCarteMazzoClient + " carte");
+                        d.setTitle("restart");
+                        d.setCancelable(true);
+                        d.setContentView(R.layout.dialog);
+                        d.show();
+                        dbRefPartita.child("finita").setValue("true");
+                        d.getBtnEsci().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent menu = new Intent(ActivityGiocoServer.this, MenuActivity.class);
+                                startActivity(menu);
+                                finish();
+                            }
+                        });
                     } else {
                         estraiDalMazzo3CarteGiocatori();
                         nMosse=3;
@@ -180,8 +173,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
         ImageView.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ONCLICK", "----------------------------------");
-
                 String idCartaCliccata = (String) hashmap.get(v.getId());
 
                 if (mioTurno && !idCartaCliccata.equals(""+R.drawable.seleziona_carta)) {
@@ -247,8 +238,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 } else if(!mioTurno){
                     Toast.makeText(ActivityGiocoServer.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
                 }
-
-                Log.d("ONCLICK", "----------------------------------");
             }
         };
 
@@ -262,13 +251,10 @@ public class ActivityGiocoServer extends AppCompatActivity {
         dbRefPartita.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
                 idClient = snapshot.child("idClient").getValue(String.class);
                 idServer = snapshot.child("idServer").getValue(String.class);
 
-                Log.d("TAG-REFRESH"," step 1 ok");
                 carteServer = String.valueOf(snapshot.child("carteServer").getValue(String.class)).split(" ");
-                Log.d("FIX2"," carteCentrali: -"+String.valueOf(snapshot.child("carteCentrali").getValue(String.class))+"-");
                 carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue(String.class)).split(" ");
                 carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
 
@@ -287,12 +273,9 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 carteSotto.clear();
                 carteSopra.clear();
 
-                Log.d("TAG-REFRESH"," step 2 ok");
-
                 for(int i=0;i<carteCentrali.length;i++) {
-                    Log.d("FIX2","carteCentrali["+i+"]: "+carteCentrali[i]);
                     if(carteCentrali[i].equals(""))
-                        break;//TODO potrebbe dare problemi quando veramente le carteCentrali sono vuote (si aggiorna sul db ma non graficamente)
+                        break;
                     if(i%2==0){
                         carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
                         adapterSopra.notifyItemInserted(carteSopra.size()-1);
@@ -301,8 +284,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
                         adapterSotto.notifyItemInserted(carteSotto.size()-1);
                     }
                 }
-
-                Log.d("TAG-REFRESH"," step 3 ok");
 
                 nCarteMazzoClient = snapshot.child("nCarteMazzoC").getValue(Integer.class);
                 nCarteMazzoServer = snapshot.child("nCarteMazzoS").getValue(Integer.class);
@@ -324,11 +305,7 @@ public class ActivityGiocoServer extends AppCompatActivity {
                 hashmap.put(ivMazzoClient.getId(),idCartaMazzoClient);
                 hashmap.put(ivMazzoServer.getId(),idCartaMazzoServer);
 
-                Log.d("TAG-REFRESH"," step 4 ok");
-
                 mioTurno = snapshot.child("turno").getValue().equals("server");
-
-                Log.d("TAG-REFRESH"," step 5 ok");
 
                 if(mioTurno) {
                     tvTurno.setVisibility(View.VISIBLE);
@@ -338,9 +315,6 @@ public class ActivityGiocoServer extends AppCompatActivity {
 
                 adapterSopra.notifyDataSetChanged();
                 adapterSotto.notifyDataSetChanged();
-
-                Log.d("TAG-REFRESH"," step 6 ok");
-
             }
 
             @Override

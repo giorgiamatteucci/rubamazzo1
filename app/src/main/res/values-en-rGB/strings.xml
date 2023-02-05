@@ -12,14 +12,12 @@
     <string name="gioca">Play now</string>
     <string name="crea">Create game</string>
     <string name="percVittorie">% win</string>
-    <string name="posizione">position</string>
+    <string name="posizione">Position</string>
     <string name="dai_carte">give cards</string>
     <string name="turno">it is your turn</string>
+    <string name="esci">Exit</string>
     <!--
     <string name="testo">The player who creates the game distributes the cards starting from the opponent, and each receives 3 cards. The next four cards in the deck are instead placed face up on the table.\n At this point each player can only play one card in each turn. When each player has run out of cards, they are again dealt three cards each.\n The game goes like this: the player has to see if among his cards there is at least one of the same value as one of those on the table. \n If there is at least one card of the same value in the table then it will be enough to first select one's own card and then the one on the table, at this point the first player has already started creating his own deck. \n If another player, during his turn, has in his hand a card of the same value as the one at the top of the pile of cards taken by another, he can steal the pile and place it next to him.\n Finally, if not it is possible to do neither of these two operations, the player is forced to choose one of his cards to put in the center, among the cards on the table.\n The game ends when there are no more cards to distribute and the remaining cards on the table they are taken by the last player who took a card from the table or stole another player's deck.
     </string>
-
-        <string name="aut_fall">Authentication failed</string>
-        <string name="aut_suss">Authentication created</string>
     -->
 </resources>

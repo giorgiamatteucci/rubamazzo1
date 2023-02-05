@@ -151,4 +151,5 @@
         app:layout_constraintStart_toEndOf="@+id/ivMazzo_sotto"
         app:layout_constraintTop_toBottomOf="@+id/rvSotto"
         app:layout_constraintVertical_bias="0.531" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

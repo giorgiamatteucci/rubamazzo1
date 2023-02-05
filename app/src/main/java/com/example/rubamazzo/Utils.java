@@ -36,10 +36,8 @@ public class Utils {
                 output += carteCentrali[i] + " ";
             }
             output +=id;
-            //Log.d("FIX2"," if output+=id: -"+output+"-");
         }else{
             output=id;
-            //Log.d("FIX2"," else output=id: -"+output+"-");
         }
 
         return output;
@@ -83,7 +81,6 @@ public class Utils {
 
         ArrayList<Giocatore> topFive = new ArrayList<>();
         for(int i=0;i<N-1;i++){
-            Log.d("ordinamento"," i: "+i);
             int j = min(giocatori,i);
             Giocatore tmp = giocatori.get(i);
             giocatori.set(i,giocatori.get(j));
@@ -104,7 +101,6 @@ public class Utils {
     private static int min(ArrayList<Giocatore> giocatori, int i){
         int min = i;
         for(int h = i+1;h<giocatori.size();h++){
-            Log.d("ordinamento"," h: "+h+" i: "+i);
             if(giocatori.get(h).minCustom(giocatori.get(min))){
                 min = h;
             }

@@ -83,12 +83,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
         ImageView.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ONCLICK", "----------------------------------");
-                if(mioTurno){
+                String idCartaCliccata = (String) hashmap.get(v.getId());
+                if (mioTurno && !idCartaCliccata.equals(""+R.drawable.seleziona_carta)) {
                     if(carteClient[0].equals("VUOTO")&&carteClient[1].equals("VUOTO")&&carteClient[2].equals("VUOTO")){
                         Toast.makeText(ActivityGiocoClient.this, "non hai carte", Toast.LENGTH_SHORT).show();
                     } else {
-                        Carta carta = mazzo.getCartaById((String) hashmap.get(v.getId()));
+                        Carta carta = mazzo.getCartaById(idCartaCliccata);
 
                         boolean corrispondenza = false;
                         String idCartaMazzoServer = (String) hashmap.get(ivMazzoServer.getId());
@@ -139,13 +139,13 @@ public class ActivityGiocoClient extends AppCompatActivity {
                             dbRefPartita.child("turno").setValue("server");
                         }
                     }
-                }else{
+                } else if(!mioTurno){
                     Toast.makeText(ActivityGiocoClient.this, "aspetta il tuo turno", Toast.LENGTH_SHORT).show();
                 }
             }
         };
 
-        ivC1Client.setOnClickListener(onClick);//if(carteClient[0].equals("VUOTO"){Toast.makeText(ActivityGiocoClient.this, "non c'è la carta", Toast.LENGTH_SHORT).show();}else{onclick}
+        ivC1Client.setOnClickListener(onClick);
         ivC2Client.setOnClickListener(onClick);
         ivC3Client.setOnClickListener(onClick);
         ivMazzoClient.setImageResource(R.drawable.seleziona_carta);
@@ -193,12 +193,8 @@ public class ActivityGiocoClient extends AppCompatActivity {
         dbRefPartita.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                Log.d("TAG-REFRESH","sono dentro aggiornaStatoPartita()");
-
                 carteClient = String.valueOf(snapshot.child("carteClient").getValue(String.class)).split(" ");
                 carteCentrali = String.valueOf(snapshot.child("carteCentrali").getValue(String.class)).split(" ");
-                Log.d("FIX2"," carteCentrali: -"+String.valueOf(snapshot.child("carteCentrali").getValue(String.class))+"-");
                 String[] carteServer = String.valueOf(snapshot.child("carteServer").getValue(String.class)).split(" ");
 
                 ivC1Client.setImageResource(carteClient[0].equals("VUOTO") ? R.drawable.seleziona_carta : mazzo.getCartaById(carteClient[0]).getIdImmagine());
@@ -213,17 +209,12 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 ivC2Server.setImageResource(carteServer[1].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
                 ivC3Server.setImageResource(carteServer[2].equals("VUOTO") ? R.drawable.seleziona_carta : R.drawable.retro);
 
-                Log.d("TAG-REFRESH"," step 1 ok");
-
                 carteSotto.clear();
                 carteSopra.clear();
 
-                Log.d("TAG-REFRESH"," step 2 ok");
-
                 for(int i=0;i<carteCentrali.length;i++) {
-                    Log.d("FIX2","carteCentrali["+i+"]: "+carteCentrali[i]);
                     if(carteCentrali[i].equals(""))
-                        break;//TODO potrebbe dare problemi quando veramente le carteCentrali sono vuote (si aggiorna sul db ma non graficamente)
+                        break;
                     if(i%2==0){
                         carteSopra.add(mazzo.getCartaById(carteCentrali[i]));
                         adapterSopra.notifyItemInserted(carteSopra.size()-1);
@@ -232,8 +223,6 @@ public class ActivityGiocoClient extends AppCompatActivity {
                         adapterSotto.notifyItemInserted(carteSotto.size()-1);
                     }
                 }
-
-                Log.d("TAG-REFRESH"," step 3 ok");
 
                 nCarteMazzoClient = snapshot.child("nCarteMazzoC").getValue(Long.class).intValue();
                 nCarteMazzoServer = snapshot.child("nCarteMazzoS").getValue(Long.class).intValue();
@@ -255,27 +244,33 @@ public class ActivityGiocoClient extends AppCompatActivity {
                 hashmap.put(ivMazzoClient.getId(),idCartaMazzoClient);
                 hashmap.put(ivMazzoServer.getId(),idCartaMazzoServer);
 
-                Log.d("TAG-REFRESH"," step 4 ok");
-
                 mioTurno = snapshot.child("turno").getValue().equals("client");
-
-                Log.d("TAG-REFRESH"," step 5 ok");
 
                 adapterSopra.notifyDataSetChanged();
                 adapterSotto.notifyDataSetChanged();
 
                 //controllo se la partita è finita
                 if(snapshot.child("finita").getValue() != null){
+                    String risultato;
                     if(Utils.getVincitore(nCarteMazzoClient, nCarteMazzoServer).equals("client")){
-                        Toast.makeText(ActivityGiocoClient.this, "HAI VINTO!", Toast.LENGTH_SHORT).show();
+                        risultato = "HAI VINTO!";
                     }else{
-                        Toast.makeText(ActivityGiocoClient.this, "HAI PERSO!", Toast.LENGTH_SHORT).show();
+                        risultato = "HAI PERSO!";
                     }
-                    Intent i = new Intent(ActivityGiocoClient.this, MenuActivity.class);
-                    startActivity(i);
-                    finish();
+                    FineDialog d = new FineDialog(ActivityGiocoClient.this,risultato,"Tu avevi " + nCarteMazzoClient + " carte","Il tuo avversario "+ nCarteMazzoServer + " carte");
+                    d.setTitle("restart");
+                    d.setCancelable(true);
+                    d.setContentView(R.layout.dialog);
+                    d.show();
+                    d.getBtnEsci().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent menu = new Intent(ActivityGiocoClient.this, MenuActivity.class);
+                            startActivity(menu);
+                            finish();
+                        }
+                    });
                 }
-                Log.d("TAG-REFRESH"," step 6 ok");
 
                 if(mioTurno) {
                     tvTurno.setVisibility(View.VISIBLE);

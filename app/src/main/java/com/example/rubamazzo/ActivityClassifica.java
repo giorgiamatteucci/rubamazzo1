@@ -71,12 +71,9 @@ public class ActivityClassifica extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot :snapshot.getChildren()){
                     HashMap hasmap = (HashMap) dataSnapshot.getValue();
                     Giocatore giocatore = Utils.getGiocatoreFromHashMap(hasmap);
-                    Log.d("TAGCLASSIFICA", "ActivityClassifica ---- " + giocatore.toStringCustom());
                     allGiocatori.add(giocatore);
                 }
-                Log.d("TAGCLASSIFICA", "giocatori.size(): "+String.valueOf(allGiocatori.size()));
                 giocatori.addAll(Utils.getTopFive(allGiocatori));
-                Log.d("TOPFIVE", ""+giocatori.size());
                 rigaAdapter.notifyDataSetChanged();
             }
             @Override
