@@ -51,14 +51,7 @@ public class RigaAdapter  extends RecyclerView.Adapter<RigaAdapter.CardViewHolde
         }else{
             Float perc = ((float) dataset.get(position).getNVittorie() / dataset.get(position).getNPartite()) * 100;
 
-            /*if (perc == 100.0) {
-                percVittorie = Float.toString(perc).substring(0, 5) + " %";
-            } else {
-                percVittorie = Float.toString(perc).substring(0, 4) + " %";
-            }*/
-
             percVittorie = Float.toString(perc)+" %";
-
         }
 
         holder.tvPercVittorie.setText(percVittorie);

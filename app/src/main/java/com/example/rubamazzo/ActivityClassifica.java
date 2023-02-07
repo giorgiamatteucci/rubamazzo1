@@ -33,7 +33,6 @@ public class ActivityClassifica extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     RigaAdapter rigaAdapter;
     ArrayList<Giocatore> giocatori;
-    TextView myUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class ActivityClassifica extends AppCompatActivity {
         giocatori = new ArrayList<>();
         rigaAdapter = new RigaAdapter(giocatori);
         rvClassifica.setAdapter(rigaAdapter);
-        myUsername = findViewById(R.id.tvMyUser);
 
         getGiocatori();
 
@@ -62,7 +60,7 @@ public class ActivityClassifica extends AppCompatActivity {
     }
 
     private void getGiocatori(){
-
+        giocatori.clear();
        FirebaseDatabase.getInstance().getReference("Giocatore").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

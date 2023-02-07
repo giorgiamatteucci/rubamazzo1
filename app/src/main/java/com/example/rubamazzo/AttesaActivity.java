@@ -51,7 +51,6 @@ public class AttesaActivity extends AppCompatActivity {
 
         if (getIntent().getStringExtra("testo").equals("in attesa di essere aggiunto ad una partita")) {
             //CLIENT
-            //dbReference.child("Partita/").addListenerForSingleValueEvent(new ValueEventListener() {
             dbReference.child("Partita/").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,7 +95,6 @@ public class AttesaActivity extends AppCompatActivity {
                             Partita partita = Utils.getPartitaFromHashMap((HashMap) snapshot.getValue());
                             if (!partita.getIdClient().isEmpty()) {
                                 String idClient = snapshot.child("idClient").getValue(String.class);
-                                Log.d("TAGFINE","AttesaActivity ---- idClient: " + idClient);
                                 String  c1client, c2client, c3client, c1server, c2server, c3server;
                                 c1client = mazzo.estraiCarta().getId();
                                 c2client = mazzo.estraiCarta().getId();

@@ -87,8 +87,8 @@ public class MenuActivity extends AppCompatActivity {
                 //verrà creata una partita e verrà messo in attesa che un altro giocatore venga aggiunto ad essa
                 Intent i = new Intent(MenuActivity.this, AttesaActivity.class);
                 i.putExtra("testo","in attesa di uno sfidante");
-                i.putExtra("npartite",npartite);
-                i.putExtra("nvittorie",nvittorie);
+                //i.putExtra("npartite",npartite);
+                //i.putExtra("nvittorie",nvittorie);
                 startActivity(i);
                 finish();
             }
@@ -97,8 +97,7 @@ public class MenuActivity extends AppCompatActivity {
         btnClassifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ActivityClassifica.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), ActivityClassifica.class));
                 finish();
             }
         });
@@ -107,8 +106,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
         });

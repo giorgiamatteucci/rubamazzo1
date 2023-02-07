@@ -67,7 +67,7 @@ public class Utils {
 
     public static String getVincitore(int nCarteMazzoClient, int nCarteMazzoServer){
         String vincitore="";
-        if(nCarteMazzoServer > nCarteMazzoClient){
+        if(nCarteMazzoServer >= nCarteMazzoClient){
             vincitore = "server";
         } else {
             vincitore = "client";

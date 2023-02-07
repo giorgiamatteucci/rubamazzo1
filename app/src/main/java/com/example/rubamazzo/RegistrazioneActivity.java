@@ -70,12 +70,11 @@ public class RegistrazioneActivity extends AppCompatActivity {
 
                                     Toast.makeText(RegistrazioneActivity.this, "Autenticazione creata.", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(getApplicationContext() , EntraActivity.class);
-                                    startActivity(i);//poi andando in EntraActivity saremo subito rindirizzati a MenuActivity
+                                    startActivity(i);
                                     finish();
                                 } else {
                                     // se la registrazione fallisce, visualizza un messaggio all'utente
                                     Toast.makeText(RegistrazioneActivity.this, "Autenticazione fallita.", Toast.LENGTH_SHORT).show();
-                                    //Toast.makeText(RegistrazioneActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

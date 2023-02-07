@@ -77,7 +77,7 @@ public class Mazzo extends ArrayList<Carta> {
     }
 
     // id dell'oggetto carta (es. b3)
-    public Carta getCartaById(String id){//public Carta getCarta(char seme, int valore){
+    public Carta getCartaById(String id){
         for(int i=0;i<istance.size();i++){
             Carta carta = istance.get(i);
             if(carta.getId().equals(id))
@@ -87,7 +87,7 @@ public class Mazzo extends ArrayList<Carta> {
     }
 
     // 2569854785 -> id della risorsa (immagine) collegata ad una carta
-    public Carta getCartaById(int id){//public Carta getCarta(char seme, int valore){
+    public Carta getCartaById(int id){
         for(int i=0;i<istance.size();i++){
             Carta carta = istance.get(i);
             if(carta.getIdImmagine() == id)

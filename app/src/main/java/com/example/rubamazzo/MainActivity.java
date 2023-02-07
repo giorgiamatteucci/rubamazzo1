@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null){
-
             Intent i = new Intent(getApplicationContext(), MenuActivity.class);
             startActivity(i);
             finish();
@@ -41,14 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //binding elementi layout con elementi java (oggetti)
         tvTitolo = findViewById(R.id.tvTitolo);
-
         btnRegistrati = findViewById(R.id.btnRegistratiMain);
         btnAccedi = findViewById(R.id.btnAccediMain);
 
         btnRegistrati.setOnClickListener(v -> {
-            //Intent i = new Intent(MainActivity.this, ActivityGiocoClient.class); //PROVA POI DA ELIMINARE
             Intent i = new Intent(MainActivity.this, RegistrazioneActivity.class);
             startActivity(i);
         });
